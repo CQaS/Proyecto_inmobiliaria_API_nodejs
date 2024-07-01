@@ -3,7 +3,7 @@ import {
 } from "express"
 import {
     exclusivos,
-    inmuebles_crear
+    /* inmuebles_crear */
 } from "../controllers/inmuebles.controllers.js"
 import {
     validarInmueble
@@ -15,6 +15,6 @@ import {
 const routesInmuebles = Router()
 
 routesInmuebles.get('/inmuebles_exclusivos', exclusivos)
-routesInmuebles.post('/inmuebles_crear', validarInmueble(nuevoInmueble), inmuebles_crear)
+/* routesInmuebles.post('/inmuebles_crear', validarInmueble(nuevoInmueble), inmuebles_crear) */
 
 export default routesInmuebles
