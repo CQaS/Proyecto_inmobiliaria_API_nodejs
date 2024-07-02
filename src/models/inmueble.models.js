@@ -148,13 +148,4 @@ Inmueble.init({
     timestamps: false
 })
 
-const listarExclisivos = async () => {
-    await Inmueble.sync()
-    return await Inmueble.findAll()
-}
-
-const QUERY_SEQUELIZE_INMUEBLES = {
-    listarExclisivos
-}
-
-export default QUERY_SEQUELIZE_INMUEBLES
+export default Inmueble

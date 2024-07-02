@@ -8,6 +8,11 @@ const {
 class Fotos_prop extends Model {}
 
 Fotos_prop.init({
+    id_foto: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true,
+    },
     image: {
         type: DataTypes.STRING, // Puedes ajustar el tipo según cómo manejas las imágenes en tu aplicación
         allowNull: false,
@@ -26,13 +31,13 @@ Fotos_prop.init({
     timestamps: false
 })
 
-const listarFotos_Prop = async () => {
+/* const listarFotos_Prop = async () => {
     await Fotos_prop.sync()
     return await Fotos_prop.findAll()
 }
 
 const QUERY_SEQUELIZE_FOTOS_PROP = {
     listarFotos_Prop
-}
+} */
 
-export default QUERY_SEQUELIZE_FOTOS_PROP
+export default Fotos_prop
