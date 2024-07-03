@@ -66,13 +66,4 @@ Contrato.init({
     timestamps: false
 })
 
-const listarContratos = async () => {
-    await Contrato.sync()
-    return await Contrato.findAll()
-}
-
-const QUERY_SEQUELIZE_CONTRATO = {
-    listarContratos
-}
-
-export default QUERY_SEQUELIZE_CONTRATO
+export default Contrato

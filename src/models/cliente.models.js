@@ -68,13 +68,4 @@ Clientes.init({
     timestamps: false
 })
 
-const listarClientes = async () => {
-    await Clientes.sync()
-    return await Clientes.findAll()
-}
-
-const QUERY_SEQUELIZE_CLIENTES = {
-    listarClientes
-}
-
-export default QUERY_SEQUELIZE_CLIENTES
+export default Clientes
