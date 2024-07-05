@@ -53,7 +53,10 @@ const {
     detalles,
     fotospor_inmueble,
     jsonliquidacion,
-    calendarcodRef
+    calendarcodRef,
+    buscarProp_Disponible,
+    idInmueble_codRef,
+    guardarContrato
 } = QUERY_SEQUELIZE_INMUEBLES
 
 export const crear_propiedad = async (req, res) => {
@@ -188,9 +191,12 @@ export const eliminarfotosporinmueble = async (req, res) => {
 
 export const buscar_por_fechas = async (req, res) => {
     try {
-        res.json({
-            buscar_por_fechas: 'buscar_por_fechas'
-        })
+        const f_ini = req.params.f_ini
+        const f_fin = req.params.f_fin
+
+        const _buscarProp_Disponible = await buscarProp_Disponible(0, f_ini, f_fin)
+        console.log(_buscarProp_Disponible)
+        res.json(_buscarProp_Disponible)
 
     } catch (err) {
         console.error(err)
@@ -236,8 +242,45 @@ export const json_liquidacion = async (req, res) => {
 
 export const inmueble_indisponible = async (req, res) => {
     try {
-        res.json({
-            inmueble_indisponible: 'inmueble_indisponible'
+        const {
+            start,
+            end,
+            cantidadDeDias,
+            cod_referencia
+        } = req.body
+
+        console.log('Data de admissão:', start)
+        console.log('Data final:', end)
+        console.log('Dias:', cantidadDeDias)
+
+        const hoy = new Date()
+        const yyyy = hoy.getFullYear()
+        const mm = String(hoy.getMonth() + 1).padStart(2, '0')
+        const dd = String(hoy.getDate()).padStart(2, '0')
+
+        const fechaFormateada_DeHoy = `${yyyy}-${mm}-${dd}`
+
+        const idInmueble = await idInmueble_codRef(cod_referencia)
+        console.log(idInmueble)
+
+        const nuevoContrato = {
+            tipo_operacion: 'Alquiler',
+            fecha_ing: start,
+            fecha_salida: end,
+            cant_dias: cantidadDeDias,
+            cliente_id: 1,
+            valor_total: '0',
+            monto_reserva: '0',
+            fecha_reserva: fechaFormateada_DeHoy,
+            datos_envio: 'A cuenta de Propietario',
+            inmueble_id: idInmueble[0].dataValues.id_inmueble
+        }
+
+        console.log(nuevoContrato)
+
+        const result = await guardarContrato(nuevoContrato)
+        return res.status(200).json({
+            ok: result
         })
 
     } catch (err) {

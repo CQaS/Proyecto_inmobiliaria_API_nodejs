@@ -2,6 +2,7 @@ import {
     Router
 } from "express"
 import {
+    buscar_por_fechas,
     calendar_codRef,
     crear_propiedad,
     editar_propiedad,
@@ -13,6 +14,7 @@ import {
     inmueble_indisponible,
     inmuebles_lista,
     json_liquidacion,
+    propiedad_por_tipo,
     /* inmuebles_crear */
 } from "../controllers/inmuebles.controllers.js"
 import {
@@ -28,8 +30,8 @@ routesInmuebles.get('/inmuebles_lista', inmuebles_lista)
 routesInmuebles.get('/inmuebles_exclusivos', exclusivos)
 routesInmuebles.get('/inmueble_detalles/:id', inmueble_detalles)
 routesInmuebles.get('/fotosporinmueble/:id', fotosporinmueble)
-routesInmuebles.get('/buscar_por_fechas/:f_ini/f_fin', fotosporinmueble)
-routesInmuebles.get('/propiedad_por_tipo', fotosporinmueble)
+routesInmuebles.get('/buscar_por_fechas/:f_ini/:f_fin', buscar_por_fechas)
+routesInmuebles.get('/propiedad_por_tipo', propiedad_por_tipo)
 routesInmuebles.get('/json_liquidacion/:id_p', json_liquidacion)
 routesInmuebles.get('/calendar_codRef/:cod_ref', calendar_codRef)
 routesInmuebles.get('/inmueble_indisponible', inmueble_indisponible)

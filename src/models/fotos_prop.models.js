@@ -31,13 +31,4 @@ Fotos_prop.init({
     timestamps: false
 })
 
-/* const listarFotos_Prop = async () => {
-    await Fotos_prop.sync()
-    return await Fotos_prop.findAll()
-}
-
-const QUERY_SEQUELIZE_FOTOS_PROP = {
-    listarFotos_Prop
-} */
-
 export default Fotos_prop
