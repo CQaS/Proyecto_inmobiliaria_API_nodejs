@@ -9,7 +9,7 @@ app.use(cors())
 app.use(morgan('dev'))
 app.use(express.json())
 
-app.use('/api', routesInmuebles)
+app.use('/api/inmuebles', routesInmuebles)
 
 // Middleware para manejar rutas no existentes
 app.use((req, res, next) => {

@@ -8,7 +8,7 @@
             if (err) {
                 console.error(err)
                 return res.status(500).json({
-                    err: 'Algo fallo'
+                    error 'Algo fallo'
                     })
                     }
                     res.json(result)
@@ -17,7 +17,7 @@
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            err: 'Algo fallo'
+            error 'Algo fallo'
             })
             
             }
@@ -31,7 +31,7 @@
          if (err) {
      console.error(err)
      return res.status(500).json({
-         err: 'Algo fallo'
+         error 'Algo fallo'
      })
  }
  res.json(result)
@@ -40,12 +40,13 @@
  } catch (err) {
      console.error(err)
      return res.status(500).json({
- err: 'Algo fallo'
+ error 'Algo fallo'
  })
  
  }
  } */
 
+import moment from "moment"
 import QUERY_SEQUELIZE_INMUEBLES from "../querys/querys.inmuebles.js"
 const {
     listarInmuebles,
@@ -56,8 +57,13 @@ const {
     calendarcodRef,
     buscarProp_Disponible,
     idInmueble_codRef,
-    guardarContrato
+    eliminarPropiedad
 } = QUERY_SEQUELIZE_INMUEBLES
+
+import QUERY_SEQUELIZE_CONTRATOS from "../querys/querys.contratos.js"
+const {
+    guardarContrato
+} = QUERY_SEQUELIZE_CONTRATOS
 
 export const crear_propiedad = async (req, res) => {
     try {
@@ -68,7 +74,7 @@ export const crear_propiedad = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            err: 'Algo fallo'
+            error: 'Algo fallo'
         })
 
     }
@@ -83,7 +89,7 @@ export const editar_propiedad = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            err: 'Algo fallo'
+            error: 'Algo fallo'
         })
 
     }
@@ -91,14 +97,20 @@ export const editar_propiedad = async (req, res) => {
 
 export const eliminar_propiedad = async (req, res) => {
     try {
-        res.json({
-            eliminar_propiedad: 'eliminar_propiedad'
-        })
+        const id = req.params.id
+        const resultado = await eliminarPropiedad(id)
+        if (resultado.error) {
+            return res.status(404).json({
+                error: resultado.error
+            })
+        }
+
+        res.status(200).json(resultado)
 
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            err: 'Algo fallo'
+            error: 'Algo fallo'
         })
 
     }
@@ -114,7 +126,7 @@ export const inmuebles_lista = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            err: 'Algo fallo'
+            error: 'Algo fallo'
         })
 
     }
@@ -131,7 +143,7 @@ export const exclusivos = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            err: 'Algo fallo'
+            error: 'Algo fallo'
         })
 
     }
@@ -150,7 +162,7 @@ export const inmueble_detalles = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            err: 'Algo fallo'
+            error: 'Algo fallo'
         })
 
     }
@@ -168,7 +180,7 @@ export const fotosporinmueble = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            err: 'Algo fallo'
+            error: 'Algo fallo'
         })
 
     }
@@ -183,7 +195,7 @@ export const eliminarfotosporinmueble = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            err: 'Algo fallo'
+            error: 'Algo fallo'
         })
 
     }
@@ -201,7 +213,7 @@ export const buscar_por_fechas = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            err: 'Algo fallo'
+            error: 'Algo fallo'
         })
 
     }
@@ -216,7 +228,7 @@ export const propiedad_por_tipo = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            err: 'Algo fallo'
+            error: 'Algo fallo'
         })
 
     }
@@ -234,7 +246,7 @@ export const json_liquidacion = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            err: 'Algo fallo'
+            error: 'Algo fallo'
         })
 
     }
@@ -249,6 +261,29 @@ export const inmueble_indisponible = async (req, res) => {
             cod_referencia
         } = req.body
 
+
+        if (!Number.isInteger(Number(cantidadDeDias)) || cantidadDeDias <= 0) {
+            return res.status(400).json({
+                error: `Cantidad de dias invalidos: ${cantidadDeDias}`
+            })
+        }
+
+        if (moment(start, 'YYYY-MM-DD', true).isValid()) {
+            null
+        } else {
+            return res.status(400).json({
+                error: `Fecha de Ingreso inválida: ${start}`
+            })
+        }
+
+        if (moment(end, 'YYYY-MM-DD', true).isValid()) {
+            null
+        } else {
+            return res.status(400).json({
+                error: `Fecha de Salida inválida: ${end}`
+            })
+        }
+
         console.log('Data de admissão:', start)
         console.log('Data final:', end)
         console.log('Dias:', cantidadDeDias)
@@ -260,8 +295,13 @@ export const inmueble_indisponible = async (req, res) => {
 
         const fechaFormateada_DeHoy = `${yyyy}-${mm}-${dd}`
 
-        const idInmueble = await idInmueble_codRef(cod_referencia)
-        console.log(idInmueble)
+        const unInmueble = await idInmueble_codRef(cod_referencia)
+        if (unInmueble.length === 0) {
+            return res.status(400).json({
+                error: `Codigo de Ref Invalido: ${cod_referencia}`
+            })
+        }
+        console.log(unInmueble)
 
         const nuevoContrato = {
             tipo_operacion: 'Alquiler',
@@ -273,20 +313,20 @@ export const inmueble_indisponible = async (req, res) => {
             monto_reserva: '0',
             fecha_reserva: fechaFormateada_DeHoy,
             datos_envio: 'A cuenta de Propietario',
-            inmueble_id: idInmueble[0].dataValues.id_inmueble
+            inmueble_id: unInmueble[0].dataValues.id_inmueble
         }
 
         console.log(nuevoContrato)
 
-        const result = await guardarContrato(nuevoContrato)
+        const ContratoGuardado = await guardarContrato(nuevoContrato)
         return res.status(200).json({
-            ok: result
+            inmueble_indisponible: ContratoGuardado
         })
 
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            err: 'Algo fallo'
+            error: 'Algo fallo'
         })
 
     }
@@ -305,7 +345,7 @@ export const calendar_codRef = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            err: 'Algo fallo'
+            error: 'Algo fallo'
         })
 
     }

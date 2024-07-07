@@ -175,13 +175,25 @@ const idInmueble_codRef = async (cod_ref) => {
 }
 
 
-const guardarContrato = async (datosContrato) => {
+const eliminarPropiedad = async (id) => {
     try {
-        const contratoGuardado = await Contrato.create(datosContrato);
-        console.log('Contrato guardado:', contratoGuardado)
-        return {
-            Contrato_guardado: contratoGuardado
+        const inmueble = await Inmueble.findByPk(id)
+
+        if (!inmueble) {
+            return {
+                error: 'Inmueble no encontrado'
+            };
         }
+
+        inmueble.estado = inmueble.estado === 1 ? 0 : 1
+        await inmueble.save()
+        console.log(`Inmueble ${id}, actualizado a Estado: ${inmueble.estado}`)
+
+        return {
+            ok: `Inmueble ${id}, actualizado a Estado: ${inmueble.estado}`,
+            inmueble
+        }
+
     } catch (error) {
         if (error.name === 'SequelizeValidationError') {
             console.error('Error de validación:', error.errors);
@@ -204,7 +216,7 @@ const guardarContrato = async (datosContrato) => {
                 Error: error
             }
         } else {
-            console.error('Error al guardar el contrato:', error);
+            console.error('Error al eliminar el inmueble:', error);
             return {
                 Error: error
             }
@@ -221,7 +233,7 @@ const QUERY_SEQUELIZE_INMUEBLES = {
     calendarcodRef,
     buscarProp_Disponible,
     idInmueble_codRef,
-    guardarContrato
+    eliminarPropiedad
 }
 
 export default QUERY_SEQUELIZE_INMUEBLES
