@@ -35,10 +35,9 @@ routesInmuebles.get('/propiedad_por_tipo', propiedad_por_tipo)
 routesInmuebles.get('/json_liquidacion/:id_p', json_liquidacion)
 routesInmuebles.get('/calendar_codRef/:cod_ref', calendar_codRef)
 routesInmuebles.get('/inmueble_indisponible', inmueble_indisponible)
-routesInmuebles.post('/crear_propiedad', crear_propiedad)
+routesInmuebles.post('/crear_propiedad', validarInmueble(nuevoInmueble), crear_propiedad)
 routesInmuebles.put('/editar_propiedad', editar_propiedad)
 routesInmuebles.put('/eliminar_propiedad/:id', eliminar_propiedad)
 routesInmuebles.delete('/eliminarfotosporinmueble', eliminarfotosporinmueble)
-/* routesInmuebles.post('/inmuebles_crear', validarInmueble(nuevoInmueble), inmuebles_crear) */
 
 export default routesInmuebles

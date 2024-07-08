@@ -1,13 +1,12 @@
 import {
     z
 } from 'zod'
-
-const pattern_Nombre = /'^[A-Z]*[a-z]{2,}[a-zA-ZñÑáÁéÉíÍúÚóÓ. ]*$'/
-const pattern_Direccion = /'^[a-zA-Z0-9\-.,:*+()sàèìòùáéíóúÁÉÍÓÚâêîôÂÊÎÔãõÃÕçÇ!?\s/]+$'/
-const pattern_Datos_envio = /'^[A-Z0-9][a-zA-ZñÑáÁéÉíÍúÚóÓ0-9,.:;\ -]*$'/
-const pattern_soloNumeros = /'^[0-9][0-9,.]*$'/
-const pattern_cod_ = /'^[a-zA-Z0-9-]*$'/
-const pattern_soloLetras = /'^[A-Z][a-zA-ZñÑáÁéÉíÍúÚóÓA-Z- ]*$'/
+import {
+    pattern_Direccion,
+    pattern_soloNumeros,
+    pattern_cod_,
+    pattern_soloLetras
+} from '../config.js'
 
 export const nuevoInmueble = z.object({
     dir_inmueble: z.string({

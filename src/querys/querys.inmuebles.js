@@ -1,16 +1,54 @@
 import {
     Op,
-    Sequelize
+    Sequelize as SequelizeLib
 } from 'sequelize'
+
 import SDM from "../db/sequelize_db.js";
 const {
     sequelize
 } = SDM
+
 import {
     Inmueble,
     Fotos_prop,
     Contrato
 } from '../models/asociacion.js'
+
+const guardarInmueble = async (datosInmueble) => {
+    try {
+        const inmuebleGuardado = await Inmueble.create(datosInmueble);
+        console.log('Inmueble guardado:', inmuebleGuardado)
+        return inmuebleGuardado
+
+    } catch (error) {
+        if (error.name === 'SequelizeValidationError') {
+            console.error('Error de validación:', error.errors);
+            return {
+                Error: error
+            }
+        } else if (error.name === 'SequelizeForeignKeyConstraintError') {
+            console.error('Error de clave foránea:', error);
+            return {
+                Error: error
+            }
+        } else if (error.name === 'SequelizeDatabaseError') {
+            console.error('Error de base de datos:', error);
+            return {
+                Error: error
+            }
+        } else if (error.name === 'SequelizeUniqueConstraintError') {
+            console.error('Error de restricción única:', error);
+            return {
+                Error: error
+            }
+        } else {
+            console.error('Error al guardar el contrato:', error);
+            return {
+                Error: error
+            }
+        }
+    }
+}
 
 const listarInmuebles = async () => {
     await Inmueble.sync()
@@ -51,6 +89,15 @@ const detalles = async (id) => {
     })
 }
 
+const consultarCodRef = async (codRef) => {
+    await Inmueble.sync()
+    return await Inmueble.findAll({
+        where: {
+            cod_referencia: codRef
+        }
+    })
+}
+
 const fotospor_inmueble = async (id) => {
     await Fotos_prop.sync()
     return await Fotos_prop.findAll({
@@ -81,7 +128,7 @@ const jsonliquidacion = async (id) => {
         replacements: {
             id
         },
-        type: Sequelize.QueryTypes.SELECT
+        type: SequelizeLib.QueryTypes.SELECT
     })
 
     return R
@@ -100,7 +147,7 @@ const buscarProp_Disponible = async (id_inmueble, fecha_ing, fecha_salida) => {
             fecha_ing,
             fecha_salida
         },
-        type: Sequelize.QueryTypes.SELECT
+        type: SequelizeLib.QueryTypes.SELECT
     })
 
     if (id_inmueble != 0) {
@@ -225,6 +272,7 @@ const eliminarPropiedad = async (id) => {
 }
 
 const QUERY_SEQUELIZE_INMUEBLES = {
+    guardarInmueble,
     listarInmuebles,
     listarExclusivos,
     detalles,
@@ -233,7 +281,8 @@ const QUERY_SEQUELIZE_INMUEBLES = {
     calendarcodRef,
     buscarProp_Disponible,
     idInmueble_codRef,
-    eliminarPropiedad
+    eliminarPropiedad,
+    consultarCodRef
 }
 
 export default QUERY_SEQUELIZE_INMUEBLES

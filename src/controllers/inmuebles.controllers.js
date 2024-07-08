@@ -49,6 +49,7 @@
 import moment from "moment"
 import QUERY_SEQUELIZE_INMUEBLES from "../querys/querys.inmuebles.js"
 const {
+    guardarInmueble,
     listarInmuebles,
     listarExclusivos,
     detalles,
@@ -57,7 +58,8 @@ const {
     calendarcodRef,
     buscarProp_Disponible,
     idInmueble_codRef,
-    eliminarPropiedad
+    eliminarPropiedad,
+    consultarCodRef
 } = QUERY_SEQUELIZE_INMUEBLES
 
 import QUERY_SEQUELIZE_CONTRATOS from "../querys/querys.contratos.js"
@@ -66,9 +68,119 @@ const {
 } = QUERY_SEQUELIZE_CONTRATOS
 
 export const crear_propiedad = async (req, res) => {
+    /* {
+        "dir_inmueble": "Los Molles 90",
+        "barrio_inmueble": "Centro",
+        "bloco_inmueble": "A",
+        "ciudad_inmueble": "Buenos Aires",
+        "nombre_red": "RedInmueble",
+        "num_apto": "101",
+        "tipo_inmueble": "Departamento",
+        "tipo_operacion": "Venta",
+        "sup_total": "100",
+        "sup_cubierta": "80",
+        "sup_semicub": "20",
+        "cant_plantas": 1,
+        "cant_dormitorios": 3,
+        "cant_banos": 2,
+        "cochera": true,
+        "cochera_rotativa": false,
+        "cod_referencia": "67yu",
+        "condicion": "Nuevo",
+        "expensas": true,
+        "descripcion": "Hermoso departamento en el centro de la ciudad.",
+        "clave_puerta_ingreso": "1234",
+        "clave_puerta_ingreso2": "5678",
+        "clave_wifi": "clave123",
+        "tipo_servicio": "SD",
+        "cliente_id": 1,
+        "valor_inmueble": "150000",
+        "exclusividad": true,
+        "habitac_maxima": 4,
+        "latitud": "-34.6037",
+        "longitud": "-58.3816"
+    } */
     try {
-        res.json({
-            crear_propiedad: 'crear_propiedad'
+        const {
+            dir_inmueble,
+            barrio_inmueble,
+            bloco_inmueble,
+            ciudad_inmueble,
+            nombre_red,
+            num_apto,
+            tipo_inmueble,
+            tipo_operacion,
+            sup_total,
+            sup_cubierta,
+            sup_semicub,
+            cant_plantas,
+            cant_dormitorios,
+            cant_banos,
+            cochera,
+            cochera_rotativa,
+            cod_referencia,
+            condicion,
+            expensas,
+            descripcion,
+            clave_puerta_ingreso,
+            clave_puerta_ingreso2,
+            clave_wifi,
+            tipo_servicio,
+            cliente_id,
+            valor_inmueble,
+            exclusividad,
+            habitac_maxima,
+            latitud,
+            longitud
+        } = req.body;
+
+        const resultado_codRef = await consultarCodRef(cod_referencia)
+
+        if (resultado_codRef.length) {
+            return res.status(404).json({
+                error: `Cod Referencia ya existe: ${cod_referencia}`
+            })
+        }
+
+
+        const nuevoInmueble = {
+            dir_inmueble,
+            barrio_inmueble,
+            bloco_inmueble,
+            ciudad_inmueble,
+            nombre_red,
+            num_apto,
+            tipo_inmueble,
+            tipo_operacion,
+            sup_total,
+            sup_cubierta,
+            sup_semicub,
+            cant_plantas,
+            cant_dormitorios,
+            cant_banos,
+            cochera,
+            cochera_rotativa,
+            cod_referencia,
+            condicion,
+            expensas,
+            descripcion,
+            clave_puerta_ingreso,
+            clave_puerta_ingreso2,
+            clave_wifi,
+            tipo_servicio,
+            cliente_id,
+            valor_inmueble,
+            exclusividad,
+            habitac_maxima,
+            latitud,
+            longitud
+        }
+
+        console.log(nuevoInmueble)
+
+        const InmuebleGuardado = await guardarInmueble(nuevoInmueble)
+        return res.status(200).json({
+            ok: InmuebleGuardado
         })
 
     } catch (err) {
