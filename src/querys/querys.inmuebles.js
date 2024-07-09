@@ -14,11 +14,37 @@ import {
     Contrato
 } from '../models/asociacion.js'
 
-const guardarInmueble = async (datosInmueble) => {
+const guardarInmueble = async (id, datosInmueble) => {
     try {
-        const inmuebleGuardado = await Inmueble.create(datosInmueble);
-        console.log('Inmueble guardado:', inmuebleGuardado)
-        return inmuebleGuardado
+        if (id == 0) {
+
+            const inmuebleGuardado = await Inmueble.create(datosInmueble);
+            console.log('Inmueble guardado:', inmuebleGuardado)
+            return {
+                ok: 'Inmueble creado existosamente!',
+                data: inmuebleGuardado
+            }
+
+        } else {
+
+            const [updatedRows] = await Inmueble.update(datosInmueble, {
+                where: {
+                    id_inmueble: id
+                }
+            })
+
+            if (updatedRows === 0) {
+                return {
+                    Error: 'Inmueble no encontrado'
+                }
+            }
+
+            return {
+                ok: "Inmueble actualizado exitosamente!",
+                data: datosInmueble
+            }
+        }
+
 
     } catch (error) {
         if (error.name === 'SequelizeValidationError') {
@@ -78,7 +104,7 @@ const listarExclusivos = async () => {
 
 const detalles = async (id) => {
     await Inmueble.sync()
-    return await Inmueble.findAll({
+    return await Inmueble.findOne({
         where: {
             id_inmueble: id
         },
@@ -228,8 +254,8 @@ const eliminarPropiedad = async (id) => {
 
         if (!inmueble) {
             return {
-                error: 'Inmueble no encontrado'
-            };
+                Error: 'Inmueble no encontrado'
+            }
         }
 
         inmueble.estado = inmueble.estado === 1 ? 0 : 1
@@ -238,7 +264,7 @@ const eliminarPropiedad = async (id) => {
 
         return {
             ok: `Inmueble ${id}, actualizado a Estado: ${inmueble.estado}`,
-            inmueble
+            data: inmueble
         }
 
     } catch (error) {

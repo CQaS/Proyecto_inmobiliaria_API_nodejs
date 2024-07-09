@@ -67,6 +67,11 @@ const {
     guardarContrato
 } = QUERY_SEQUELIZE_CONTRATOS
 
+import QUERY_SEQUELIZE_CLIENTES from "../querys/querys.clientes.js"
+const {
+    consultarCliente
+} = QUERY_SEQUELIZE_CLIENTES
+
 export const crear_propiedad = async (req, res) => {
     /* {
         "dir_inmueble": "Los Molles 90",
@@ -134,11 +139,19 @@ export const crear_propiedad = async (req, res) => {
             longitud
         } = req.body;
 
-        const resultado_codRef = await consultarCodRef(cod_referencia)
+        const existe_codRef = await consultarCodRef(cod_referencia)
 
-        if (resultado_codRef.length) {
+        if (existe_codRef.length > 0) {
             return res.status(404).json({
-                error: `Cod Referencia ya existe: ${cod_referencia}`
+                Error: `Cod Referencia ya existe: ${cod_referencia}`
+            })
+        }
+
+        const existe_cliente = await consultarCliente(cliente_id)
+
+        if (existe_cliente.length === 0) {
+            return res.status(404).json({
+                Error: `ID Cliente no existe: ${cliente_id}`
             })
         }
 
@@ -178,15 +191,13 @@ export const crear_propiedad = async (req, res) => {
 
         console.log(nuevoInmueble)
 
-        const InmuebleGuardado = await guardarInmueble(nuevoInmueble)
-        return res.status(200).json({
-            ok: InmuebleGuardado
-        })
+        const InmuebleGuardado = await guardarInmueble(0, nuevoInmueble)
+        return res.status(200).json(InmuebleGuardado)
 
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            error: 'Algo fallo'
+            Error: 'Algo fallo'
         })
 
     }
@@ -194,14 +205,110 @@ export const crear_propiedad = async (req, res) => {
 
 export const editar_propiedad = async (req, res) => {
     try {
-        res.json({
-            editar_propiedad: 'editar_propiedad'
-        })
+        const id = req.params.id
+        const {
+            dir_inmueble,
+            barrio_inmueble,
+            bloco_inmueble,
+            ciudad_inmueble,
+            nombre_red,
+            num_apto,
+            tipo_inmueble,
+            tipo_operacion,
+            sup_total,
+            sup_cubierta,
+            sup_semicub,
+            cant_plantas,
+            cant_dormitorios,
+            cant_banos,
+            cochera,
+            cochera_rotativa,
+            cod_referencia,
+            condicion,
+            expensas,
+            descripcion,
+            clave_puerta_ingreso,
+            clave_puerta_ingreso2,
+            clave_wifi,
+            tipo_servicio,
+            cliente_id,
+            valor_inmueble,
+            exclusividad,
+            habitac_maxima,
+            latitud,
+            longitud
+        } = req.body;
+
+        const el_inmueble = await detalles(id)
+
+        if (el_inmueble == null) {
+            return res.status(404).json({
+                Error: "Inmueble no encontrado"
+            })
+        }
+
+        if (cod_referencia !== el_inmueble.cod_referencia) {
+
+            const existe_codRef = await consultarCodRef(cod_referencia)
+
+            if (existe_codRef.length > 0) {
+                return res.status(404).json({
+                    Error: `Cod Referencia ya existe: ${cod_referencia}`
+                })
+            }
+        }
+
+        const existe_cliente = await consultarCliente(cliente_id)
+
+        if (existe_cliente.length === 0) {
+            return res.status(404).json({
+                Error: `ID Cliente no existe: ${cliente_id}`
+            })
+        }
+
+
+        const inmueble_A_Editar = {
+            dir_inmueble,
+            barrio_inmueble,
+            bloco_inmueble,
+            ciudad_inmueble,
+            nombre_red,
+            num_apto,
+            tipo_inmueble,
+            tipo_operacion,
+            sup_total,
+            sup_cubierta,
+            sup_semicub,
+            cant_plantas,
+            cant_dormitorios,
+            cant_banos,
+            cochera,
+            cochera_rotativa,
+            cod_referencia,
+            condicion,
+            expensas,
+            descripcion,
+            clave_puerta_ingreso,
+            clave_puerta_ingreso2,
+            clave_wifi,
+            tipo_servicio,
+            cliente_id,
+            valor_inmueble,
+            exclusividad,
+            habitac_maxima,
+            latitud,
+            longitud
+        }
+
+        console.log(inmueble_A_Editar)
+
+        const InmuebleEditado = await guardarInmueble(id, inmueble_A_Editar)
+        return res.status(200).json(InmuebleEditado)
 
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            error: 'Algo fallo'
+            Error: 'Algo fallo'
         })
 
     }
@@ -211,9 +318,9 @@ export const eliminar_propiedad = async (req, res) => {
     try {
         const id = req.params.id
         const resultado = await eliminarPropiedad(id)
-        if (resultado.error) {
+        if (resultado.Error) {
             return res.status(404).json({
-                error: resultado.error
+                Error: resultado.Error
             })
         }
 
@@ -222,7 +329,7 @@ export const eliminar_propiedad = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            error: 'Algo fallo'
+            Error: 'Algo fallo'
         })
 
     }
@@ -238,7 +345,7 @@ export const inmuebles_lista = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            error: 'Algo fallo'
+            Error: 'Algo fallo'
         })
 
     }
@@ -255,7 +362,7 @@ export const exclusivos = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            error: 'Algo fallo'
+            Error: 'Algo fallo'
         })
 
     }
@@ -274,7 +381,7 @@ export const inmueble_detalles = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            error: 'Algo fallo'
+            Error: 'Algo fallo'
         })
 
     }
@@ -292,7 +399,7 @@ export const fotosporinmueble = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            error: 'Algo fallo'
+            Error: 'Algo fallo'
         })
 
     }
@@ -307,7 +414,7 @@ export const eliminarfotosporinmueble = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            error: 'Algo fallo'
+            Error: 'Algo fallo'
         })
 
     }
@@ -325,7 +432,7 @@ export const buscar_por_fechas = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            error: 'Algo fallo'
+            Error: 'Algo fallo'
         })
 
     }
@@ -340,7 +447,7 @@ export const propiedad_por_tipo = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            error: 'Algo fallo'
+            Error: 'Algo fallo'
         })
 
     }
@@ -358,7 +465,7 @@ export const json_liquidacion = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            error: 'Algo fallo'
+            Error: 'Algo fallo'
         })
 
     }
@@ -376,7 +483,7 @@ export const inmueble_indisponible = async (req, res) => {
 
         if (!Number.isInteger(Number(cantidadDeDias)) || cantidadDeDias <= 0) {
             return res.status(400).json({
-                error: `Cantidad de dias invalidos: ${cantidadDeDias}`
+                Error: `Cantidad de dias invalidos: ${cantidadDeDias}`
             })
         }
 
@@ -384,7 +491,7 @@ export const inmueble_indisponible = async (req, res) => {
             null
         } else {
             return res.status(400).json({
-                error: `Fecha de Ingreso inválida: ${start}`
+                Error: `Fecha de Ingreso inválida: ${start}`
             })
         }
 
@@ -392,7 +499,7 @@ export const inmueble_indisponible = async (req, res) => {
             null
         } else {
             return res.status(400).json({
-                error: `Fecha de Salida inválida: ${end}`
+                Error: `Fecha de Salida inválida: ${end}`
             })
         }
 
@@ -410,7 +517,7 @@ export const inmueble_indisponible = async (req, res) => {
         const unInmueble = await idInmueble_codRef(cod_referencia)
         if (unInmueble.length === 0) {
             return res.status(400).json({
-                error: `Codigo de Ref Invalido: ${cod_referencia}`
+                Error: `Codigo de Ref Invalido: ${cod_referencia}`
             })
         }
         console.log(unInmueble)
@@ -438,7 +545,7 @@ export const inmueble_indisponible = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            error: 'Algo fallo'
+            Error: 'Algo fallo'
         })
 
     }
@@ -457,7 +564,7 @@ export const calendar_codRef = async (req, res) => {
     } catch (err) {
         console.error(err)
         return res.status(500).json({
-            error: 'Algo fallo'
+            Error: 'Algo fallo'
         })
 
     }
