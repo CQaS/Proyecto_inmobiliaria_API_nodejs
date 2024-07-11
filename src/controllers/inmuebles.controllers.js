@@ -72,72 +72,62 @@ const {
     consultarCliente
 } = QUERY_SEQUELIZE_CLIENTES
 
+import QUERY_SEQUELIZE_FOTOSPROP from "../querys/querys.fotosProp.js"
+const {
+    guardarFotosInmuebleNuevo
+} = QUERY_SEQUELIZE_FOTOSPROP
+
 export const crear_propiedad = async (req, res) => {
     /* {
-        "dir_inmueble": "Los Molles 90",
-        "barrio_inmueble": "Centro",
-        "bloco_inmueble": "A",
-        "ciudad_inmueble": "Buenos Aires",
-        "nombre_red": "RedInmueble",
-        "num_apto": "101",
-        "tipo_inmueble": "Departamento",
-        "tipo_operacion": "Venta",
-        "sup_total": "100",
-        "sup_cubierta": "80",
-        "sup_semicub": "20",
-        "cant_plantas": 1,
-        "cant_dormitorios": 3,
-        "cant_banos": 2,
-        "cochera": true,
-        "cochera_rotativa": false,
-        "cod_referencia": "67yu",
-        "condicion": "Nuevo",
-        "expensas": true,
-        "descripcion": "Hermoso departamento en el centro de la ciudad.",
-        "clave_puerta_ingreso": "1234",
-        "clave_puerta_ingreso2": "5678",
-        "clave_wifi": "clave123",
-        "tipo_servicio": "SD",
-        "cliente_id": 1,
-        "valor_inmueble": "150000",
-        "exclusividad": true,
-        "habitac_maxima": 4,
-        "latitud": "-34.6037",
-        "longitud": "-58.3816"
-    } */
+    "dir_inmueble": "Los Molles 90",
+    "barrio_inmueble": "Centro",
+    "bloco_inmueble": "A",
+    "ciudad_inmueble": "Buenos Aires",
+    "nombre_red": "RedInmueble",
+    "num_apto": "101",
+    "tipo_inmueble": "Departamento",
+    "tipo_operacion": "Venta",
+    "sup_total": "100",
+    "sup_cubierta": "80",
+    "sup_semicub": "20",
+    "cant_plantas": 1,
+    "cant_dormitorios": 3,
+    "cant_banos": 2,
+    "cochera": true,
+    "cochera_rotativa": false,
+    "cod_referencia": "1qa2ws",
+    "condicion": "Nuevo",
+    "expensas": true,
+    "descripcion": "Hermoso departamento en el centro de la ciudad de Merlo.",
+    "clave_puerta_ingreso": "1234",
+    "clave_puerta_ingreso2": "5678",
+    "clave_wifi": "clave123",
+    "tipo_servicio": "WI-FI, Ropa de cama",
+    "cliente_id": 1,
+    "valor_inmueble": "150000",
+    "exclusividad": true,
+    "habitac_maxima": 4,
+    "latitud": "-34.6037",
+    "longitud": "-58.3816",
+    "fotos": [
+        {
+            "image": "foto1.jpg"
+        },
+        {
+            "image": "foto2.jpg"
+        }
+    ]
+} */
     try {
         const {
-            dir_inmueble,
-            barrio_inmueble,
-            bloco_inmueble,
-            ciudad_inmueble,
-            nombre_red,
-            num_apto,
-            tipo_inmueble,
-            tipo_operacion,
-            sup_total,
-            sup_cubierta,
-            sup_semicub,
-            cant_plantas,
-            cant_dormitorios,
-            cant_banos,
-            cochera,
-            cochera_rotativa,
+            fotos,
             cod_referencia,
-            condicion,
-            expensas,
-            descripcion,
-            clave_puerta_ingreso,
-            clave_puerta_ingreso2,
-            clave_wifi,
-            tipo_servicio,
             cliente_id,
-            valor_inmueble,
-            exclusividad,
-            habitac_maxima,
-            latitud,
-            longitud
+            ...nuevoInmueble
         } = req.body;
+
+        nuevoInmueble.cod_referencia = cod_referencia
+        nuevoInmueble.cliente_id = cliente_id
 
         const existe_codRef = await consultarCodRef(cod_referencia)
 
@@ -155,44 +145,21 @@ export const crear_propiedad = async (req, res) => {
             })
         }
 
+        const InmuebleGuardado = await guardarInmueble(0, nuevoInmueble)
+        const FotosGuardadas = await guardarFotosInmuebleNuevo(InmuebleGuardado.id_inmueble_nuevo, fotos)
 
-        const nuevoInmueble = {
-            dir_inmueble,
-            barrio_inmueble,
-            bloco_inmueble,
-            ciudad_inmueble,
-            nombre_red,
-            num_apto,
-            tipo_inmueble,
-            tipo_operacion,
-            sup_total,
-            sup_cubierta,
-            sup_semicub,
-            cant_plantas,
-            cant_dormitorios,
-            cant_banos,
-            cochera,
-            cochera_rotativa,
-            cod_referencia,
-            condicion,
-            expensas,
-            descripcion,
-            clave_puerta_ingreso,
-            clave_puerta_ingreso2,
-            clave_wifi,
-            tipo_servicio,
-            cliente_id,
-            valor_inmueble,
-            exclusividad,
-            habitac_maxima,
-            latitud,
-            longitud
+        if (InmuebleGuardado.ok && FotosGuardadas.ok) {
+
+            return res.status(200).json(InmuebleGuardado)
         }
 
-        console.log(nuevoInmueble)
+        if (InmuebleGuardado.Error || FotosGuardadas.Error) {
 
-        const InmuebleGuardado = await guardarInmueble(0, nuevoInmueble)
-        return res.status(200).json(InmuebleGuardado)
+            return res.status(404).json({
+                Error: 'Error al guardar el Inmueble y/o Las Fotos!'
+            })
+        }
+
 
     } catch (err) {
         console.error(err)

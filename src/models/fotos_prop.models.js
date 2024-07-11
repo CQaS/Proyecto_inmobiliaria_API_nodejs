@@ -16,9 +16,6 @@ Fotos_prop.init({
     image: {
         type: DataTypes.STRING, // Puedes ajustar el tipo según cómo manejas las imágenes en tu aplicación
         allowNull: false,
-        validate: {
-            isUrl: true, // Asumiendo que la imagen es una URL en este ejemplo
-        },
     },
     inmueble_id: {
         type: DataTypes.INTEGER,

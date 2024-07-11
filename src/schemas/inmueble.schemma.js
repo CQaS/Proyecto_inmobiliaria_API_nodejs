@@ -7,8 +7,11 @@ import {
     pattern_cod_,
     pattern_soloLetras
 } from '../config.js'
+import {
+    fotosSchema
+} from "../schemas/foto.schemma.js"
 
-export const nuevoInmueble = z.object({
+export const inmuebleSchemma = z.object({
     dir_inmueble: z.string({
         required_error: "Direccion Inmueble Requerida",
     }).max(100, "Máximo 100 caracteres").regex(pattern_Direccion, "Formato de Dirección inválido"),
@@ -88,5 +91,7 @@ export const nuevoInmueble = z.object({
     }).max(100, "Máximo 100 caracteres").default('0.0'),
     longitud: z.string({
         required_error: "Long Requerido",
-    }).max(100, "Máximo 100 caracteres").default('0.0')
-})
+    }).max(100, "Máximo 100 caracteres").default('0.0'),
+    fotos: z.array(fotosSchema).optional()
+
+}).passthrough()

@@ -22,7 +22,8 @@ const guardarInmueble = async (id, datosInmueble) => {
             console.log('Inmueble guardado:', inmuebleGuardado)
             return {
                 ok: 'Inmueble creado existosamente!',
-                data: inmuebleGuardado
+                data: inmuebleGuardado,
+                id_inmueble_nuevo: inmuebleGuardado.id_inmueble
             }
 
         } else {
@@ -68,7 +69,7 @@ const guardarInmueble = async (id, datosInmueble) => {
                 Error: error
             }
         } else {
-            console.error('Error al guardar el contrato:', error);
+            console.error('Error al guardar el Inmueble:', error);
             return {
                 Error: error
             }

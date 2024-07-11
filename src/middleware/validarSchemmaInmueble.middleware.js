@@ -1,4 +1,4 @@
-export const validarInmueble = (schema) => (req, res, next) => {
+export const validarSchemmaInmueble = (schema) => (req, res, next) => {
     try {
         console.log(req.body)
         schema.parse(req.body)
