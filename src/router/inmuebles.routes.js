@@ -38,6 +38,6 @@ routesInmuebles.get('/inmueble_indisponible', inmueble_indisponible)
 routesInmuebles.post('/crear_propiedad', validarSchemmaInmueble(inmuebleSchemma), crear_propiedad)
 routesInmuebles.put('/editar_propiedad/:id', validarSchemmaInmueble(inmuebleSchemma), editar_propiedad)
 routesInmuebles.put('/eliminar_propiedad/:id', eliminar_propiedad)
-routesInmuebles.delete('/eliminarfotosporinmueble', eliminarfotosporinmueble)
+routesInmuebles.delete('/eliminarfotosporinmueble/:id', eliminarfotosporinmueble)
 
 export default routesInmuebles

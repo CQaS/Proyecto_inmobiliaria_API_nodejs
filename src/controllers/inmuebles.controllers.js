@@ -74,7 +74,8 @@ const {
 
 import QUERY_SEQUELIZE_FOTOSPROP from "../querys/querys.fotosProp.js"
 const {
-    guardarFotosInmuebleNuevo
+    guardarFotosInmuebleNuevo,
+    eliminarFotoDeInmueble
 } = QUERY_SEQUELIZE_FOTOSPROP
 
 export const crear_propiedad = async (req, res) => {
@@ -121,6 +122,8 @@ export const crear_propiedad = async (req, res) => {
     try {
         const {
             fotos,
+            imgportada,
+            video,
             cod_referencia,
             cliente_id,
             ...nuevoInmueble
@@ -147,13 +150,14 @@ export const crear_propiedad = async (req, res) => {
 
         const InmuebleGuardado = await guardarInmueble(0, nuevoInmueble)
         const FotosGuardadas = await guardarFotosInmuebleNuevo(InmuebleGuardado.id_inmueble_nuevo, fotos)
+        const FotosPortadaGuardada = await guardarFotosInmuebleNuevo(InmuebleGuardado.id_inmueble_nuevo, imgportada)
 
-        if (InmuebleGuardado.ok && FotosGuardadas.ok) {
+        if (InmuebleGuardado.ok && FotosGuardadas.ok && FotosPortadaGuardada.ok) {
 
             return res.status(200).json(InmuebleGuardado)
         }
 
-        if (InmuebleGuardado.Error || FotosGuardadas.Error) {
+        if (InmuebleGuardado.Error || FotosGuardadas.Error || FotosPortadaGuardada.Error) {
 
             return res.status(404).json({
                 Error: 'Error al guardar el Inmueble y/o Las Fotos!'
@@ -174,37 +178,16 @@ export const editar_propiedad = async (req, res) => {
     try {
         const id = req.params.id
         const {
-            dir_inmueble,
-            barrio_inmueble,
-            bloco_inmueble,
-            ciudad_inmueble,
-            nombre_red,
-            num_apto,
-            tipo_inmueble,
-            tipo_operacion,
-            sup_total,
-            sup_cubierta,
-            sup_semicub,
-            cant_plantas,
-            cant_dormitorios,
-            cant_banos,
-            cochera,
-            cochera_rotativa,
+            fotos,
+            imgportada,
+            video,
             cod_referencia,
-            condicion,
-            expensas,
-            descripcion,
-            clave_puerta_ingreso,
-            clave_puerta_ingreso2,
-            clave_wifi,
-            tipo_servicio,
             cliente_id,
-            valor_inmueble,
-            exclusividad,
-            habitac_maxima,
-            latitud,
-            longitud
+            ...inmueble_A_Editar
         } = req.body;
+
+        inmueble_A_Editar.cod_referencia = cod_referencia
+        inmueble_A_Editar.cliente_id = cliente_id
 
         const el_inmueble = await detalles(id)
 
@@ -233,65 +216,31 @@ export const editar_propiedad = async (req, res) => {
             })
         }
 
+        const InmuebleEditado = await guardarInmueble(id, inmueble_A_Editar)
 
-        const inmueble_A_Editar = {
-            dir_inmueble,
-            barrio_inmueble,
-            bloco_inmueble,
-            ciudad_inmueble,
-            nombre_red,
-            num_apto,
-            tipo_inmueble,
-            tipo_operacion,
-            sup_total,
-            sup_cubierta,
-            sup_semicub,
-            cant_plantas,
-            cant_dormitorios,
-            cant_banos,
-            cochera,
-            cochera_rotativa,
-            cod_referencia,
-            condicion,
-            expensas,
-            descripcion,
-            clave_puerta_ingreso,
-            clave_puerta_ingreso2,
-            clave_wifi,
-            tipo_servicio,
-            cliente_id,
-            valor_inmueble,
-            exclusividad,
-            habitac_maxima,
-            latitud,
-            longitud
+        let FotosPortadaGuardada = null
+        if (imgportada) {
+            const resultado = await eliminarFotoDeInmueble(id, true)
+            if (resultado.Error) {
+                return res.status(404).json({
+                    Error: resultado.Error
+                })
+            }
+
+            FotosPortadaGuardada = await guardarFotosInmuebleNuevo(id, imgportada)
+            console.log(`FotosPortadaGuardada ${imgportada}`)
+        }
+        if (InmuebleEditado.ok && FotosPortadaGuardada.ok) {
+
+            return res.status(200).json(InmuebleEditado)
         }
 
-        console.log(inmueble_A_Editar)
+        if (InmuebleEditado.Error || FotosPortadaGuardada.Error) {
 
-        const InmuebleEditado = await guardarInmueble(id, inmueble_A_Editar)
-        return res.status(200).json(InmuebleEditado)
-
-    } catch (err) {
-        console.error(err)
-        return res.status(500).json({
-            Error: 'Algo fallo'
-        })
-
-    }
-}
-
-export const eliminar_propiedad = async (req, res) => {
-    try {
-        const id = req.params.id
-        const resultado = await eliminarPropiedad(id)
-        if (resultado.Error) {
             return res.status(404).json({
-                Error: resultado.Error
+                Error: 'Error al Editar el Inmueble y/o Las Fotos!'
             })
         }
-
-        res.status(200).json(resultado)
 
     } catch (err) {
         console.error(err)
@@ -362,21 +311,6 @@ export const fotosporinmueble = async (req, res) => {
         console.log(_fotosporinmueble.length)
         console.log(_fotosporinmueble)
         res.json(_fotosporinmueble)
-
-    } catch (err) {
-        console.error(err)
-        return res.status(500).json({
-            Error: 'Algo fallo'
-        })
-
-    }
-}
-
-export const eliminarfotosporinmueble = async (req, res) => {
-    try {
-        res.json({
-            eliminarfotosporinmueble: 'eliminarfotosporinmueble'
-        })
 
     } catch (err) {
         console.error(err)
@@ -527,6 +461,48 @@ export const calendar_codRef = async (req, res) => {
         console.log(_calendarcodRef.length)
         console.log(_calendarcodRef)
         res.json(_calendarcodRef)
+
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({
+            Error: 'Algo fallo'
+        })
+
+    }
+}
+
+export const eliminar_propiedad = async (req, res) => {
+    try {
+        const id = req.params.id
+        const resultado = await eliminarPropiedad(id)
+        if (resultado.Error) {
+            return res.status(404).json({
+                Error: resultado.Error
+            })
+        }
+
+        res.status(200).json(resultado)
+
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({
+            Error: 'Algo fallo'
+        })
+
+    }
+}
+
+export const eliminarfotosporinmueble = async (req, res) => {
+    try {
+        const id = req.params.id
+        const resultado = await eliminarFotoDeInmueble(id, false)
+        if (resultado.Error) {
+            return res.status(404).json({
+                Error: resultado.Error
+            })
+        }
+
+        res.status(200).json(resultado)
 
     } catch (err) {
         console.error(err)

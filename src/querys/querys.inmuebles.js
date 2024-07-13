@@ -36,7 +36,8 @@ const guardarInmueble = async (id, datosInmueble) => {
 
             if (updatedRows === 0) {
                 return {
-                    Error: 'Inmueble no encontrado'
+                    ok: "No se realizaron cambios, los datos del Inmueble son los mismos!",
+                    data: datosInmueble
                 }
             }
 
