@@ -16,13 +16,24 @@ const consultarCliente = async (id) => {
     await Cliente.sync()
     return await Cliente.findAll({
         where: {
-            id_cliente: id
+            id_cliente: id,
+            estado: 1
+        }
+    })
+}
+
+const listarClientes = async () => {
+    await Cliente.sync()
+    return await Cliente.findAll({
+        where: {
+            estado: 1
         }
     })
 }
 
 const QUERY_SEQUELIZE_CLIENTES = {
-    consultarCliente
+    consultarCliente,
+    listarClientes
 }
 
 export default QUERY_SEQUELIZE_CLIENTES

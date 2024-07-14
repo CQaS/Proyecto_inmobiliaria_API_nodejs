@@ -14,8 +14,7 @@ import {
     inmueble_indisponible,
     inmuebles_lista,
     json_liquidacion,
-    propiedad_por_tipo,
-    /* inmuebles_crear */
+    propiedad_por_tipo
 } from "../controllers/inmuebles.controllers.js"
 import {
     validarSchemmaInmueble
