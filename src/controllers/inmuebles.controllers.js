@@ -289,9 +289,10 @@ export const inmueble_detalles = async (req, res) => {
     try {
         const id = req.params.id
 
-        const _detalles = await detalles(id)
-        console.log(_detalles.length)
-        console.log(_detalles)
+        let _detalles = await detalles(id)
+        _detalles != null ? console.log(_detalles) : _detalles = {
+            Error: 'Inmueble no encontrado!'
+        }
         res.json(_detalles)
 
     } catch (err) {

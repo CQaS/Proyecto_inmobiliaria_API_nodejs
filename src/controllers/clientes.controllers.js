@@ -1,7 +1,11 @@
 import QUERY_SEQUELIZE_CLIENTES from "../querys/querys.clientes.js"
 const {
     consultarCliente,
-    listarClientes
+    listarClientes,
+    clienteLocDni,
+    clienteLocNombre,
+    clientePropNombre,
+    eliminarCliente
 } = QUERY_SEQUELIZE_CLIENTES
 
 export const clientes_lista = async (req, res) => {
@@ -67,28 +71,15 @@ export const recibo_cliente = async (req, res) => {
     }
 }
 
-export const eliminar_cliente = async (req, res) => {
-    try {
-        const id = req.params.id
-        res.status(200).json({
-            ok: `eliminar_cliente ${id}`
-        })
-
-    } catch (err) {
-        console.error(err)
-        return res.status(500).json({
-            Error: 'Algo fallo'
-        })
-
-    }
-}
-
 export const cliente_loc_nombre = async (req, res) => {
     try {
         const nombre = req.params.nombre
-        res.status(200).json({
-            ok: `cliente_inq_nombre ${nombre}`
-        })
+        let _clientelocnombre = await clienteLocNombre(nombre)
+        _clientelocnombre != null ? console.log(_clientelocnombre) : _clientelocnombre = {
+            Error: 'Cliente no encontrado!'
+        }
+        res.json(_clientelocnombre)
+
 
     } catch (err) {
         console.error(err)
@@ -102,9 +93,11 @@ export const cliente_loc_nombre = async (req, res) => {
 export const cliente_loc_dni = async (req, res) => {
     try {
         const dni = req.params.dni
-        res.status(200).json({
-            ok: `cliente_inq_dni ${dni}`
-        })
+        let _clientelocdni = await clienteLocDni(dni)
+        _clientelocdni != null ? console.log(_clientelocdni) : _clientelocdni = {
+            Error: 'Cliente no encontrado!'
+        }
+        res.json(_clientelocdni)
 
     } catch (err) {
         console.error(err)
@@ -118,9 +111,32 @@ export const cliente_loc_dni = async (req, res) => {
 export const cliente_prop_nombre = async (req, res) => {
     try {
         const nombre = req.params.nombre
-        res.status(200).json({
-            ok: `cliente_prop_nombre ${nombre}`
+        let _clientepropnombre = await clientePropNombre(nombre)
+        _clientepropnombre != null ? console.log(_clientepropnombre) : _clientepropnombre = {
+            Error: 'Cliente no encontrado!'
+        }
+        res.json(_clientepropnombre)
+
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({
+            Error: 'Algo fallo'
         })
+
+    }
+}
+
+export const eliminar_cliente = async (req, res) => {
+    try {
+        const id = req.params.id
+        const resultado = await eliminarCliente(id)
+        if (resultado.Error) {
+            return res.status(404).json({
+                Error: resultado.Error
+            })
+        }
+
+        res.status(200).json(resultado)
 
     } catch (err) {
         console.error(err)
