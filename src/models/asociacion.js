@@ -2,6 +2,7 @@ import Inmueble from "./inmueble.models.js"
 import Fotos_prop from "./fotos_prop.models.js"
 import Contrato from "./contrato.models.js"
 import Cliente from "./cliente.models.js"
+import AuthUsers from "./authusers.models.js"
 
 /* INMUEBLE -> FOTOS */
 Inmueble.hasMany(Fotos_prop, {
@@ -24,5 +25,6 @@ export {
     Inmueble,
     Fotos_prop,
     Contrato,
-    Cliente
+    Cliente,
+    AuthUsers
 }

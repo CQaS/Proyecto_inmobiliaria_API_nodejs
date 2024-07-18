@@ -17,3 +17,9 @@ export const pattern_soloLetras = /^[A-Z][a-zA-ZñÑáÁéÉíÍúÚóÓA-Z- ]*$
 export const pattern_imagen = /\.(jpg|jpeg|png|gif)$/i
 export const pattern_email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const pattern_fecha = /^\d{4}-\d{2}-\d{2}$/;
+
+/* VALIDADORES PARA USERS */
+
+export const usernamePattern = /^[a-zA-Z0-9_]+$/
+export const namePattern = /^[a-zA-Z]+$/
+export const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/

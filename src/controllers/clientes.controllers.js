@@ -9,6 +9,7 @@ const {
     clienteLocNombre,
     clientePropNombre,
     guardarCliente,
+    reciboCliente,
     eliminarCliente
 } = QUERY_SEQUELIZE_CLIENTES
 
@@ -172,6 +173,9 @@ export const editar_cliente = async (req, res) => {
 export const recibo_cliente = async (req, res) => {
     try {
         const id = req.params.id
+        const res_reciboDelCliente = await reciboCliente(id)
+        console.log(res_reciboDelCliente.length)
+        console.log(res_reciboDelCliente)
         res.status(200).json({
             ok: `recibo_cliente ${id}`
         })

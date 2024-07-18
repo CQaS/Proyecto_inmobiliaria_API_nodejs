@@ -208,6 +208,23 @@ const eliminarCliente = async (id) => {
     }
 }
 
+const reciboCliente = async (id) => {
+    const R = await sequelize.query(`
+        SELECT cli.nom_cliente, inm.cod_referencia, inm.cliente_id as idPropietario, inm.nombre_red, inm.clave_wifi, con.fecha_ing, con.fecha_salida, (con.valor_total - con.monto_reserva) AS saldo 
+        FROM clientes cli 
+        JOIN contrato con ON cli.id_cliente = con.cliente_id 
+        JOIN inmueble inm ON con.inmueble_id = inm.id_inmueble 
+        WHERE cli.id_cliente = :id
+        `, {
+        replacements: {
+            id
+        },
+        type: SequelizeLib.QueryTypes.SELECT
+    })
+
+    return R
+}
+
 const QUERY_SEQUELIZE_CLIENTES = {
     consultarCliente,
     consultarDni,
@@ -218,6 +235,7 @@ const QUERY_SEQUELIZE_CLIENTES = {
     clienteLocNombre,
     clientePropNombre,
     guardarCliente,
+    reciboCliente,
     eliminarCliente
 }
 
