@@ -6,9 +6,7 @@ const {
 } = SDM
 import {
     pattern_Direccion,
-    pattern_soloNumeros,
     pattern_cod_,
-    pattern_soloLetras
 } from '../config.js'
 
 class Inmueble extends Model {}

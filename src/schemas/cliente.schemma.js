@@ -1,13 +1,16 @@
+const currentDate = new Date()
 import {
     z
 } from 'zod';
-
-const pattern_Nombre = /'^[A-Z]*[a-z]{2,}[a-zA-ZñÑáÁéÉíÍúÚóÓ. ]*$'/
-const pattern_Direccion = /'^[a-zA-Z0-9\-.,:*+()sàèìòùáéíóúÁÉÍÓÚâêîôÂÊÎÔãõÃÕçÇ!?\s/]+$'/
-const pattern_Datos_envio = /'^[A-Z0-9][a-zA-ZñÑáÁéÉíÍúÚóÓ0-9,.:;\ -]*$'/
-const pattern_soloNumeros = /'^[0-9][0-9,.]*$'/
-const pattern_cod_ = /'^[a-zA-Z0-9-]*$'/
-const pattern_soloLetras = /'^[A-Z][a-zA-ZñÑáÁéÉíÍúÚóÓA-Z- ]*$'/
+import {
+    pattern_Nombre,
+    pattern_Direccion,
+    pattern_soloLetras,
+    pattern_email,
+    pattern_fecha,
+    edad_minima
+} from '../config.js'
+const mayorMenor = new Date(currentDate.getFullYear() - edad_minima, currentDate.getMonth(), currentDate.getDate())
 
 export const ClientesSchema = z.object({
     nom_cliente: z.string({
@@ -27,7 +30,7 @@ export const ClientesSchema = z.object({
     }).int("Debe ser un número entero"),
     email_cliente: z.string({
         required_error: "Requerido",
-    }).max(45, "Máximo 45 caracteres").regex(pattern_Nombre, "Formato de email inválido"),
+    }).max(45, "Máximo 45 caracteres").regex(pattern_email, "Formato de email inválido"),
     ciudad_cliente: z.string({
         required_error: "Requerido",
     }).max(45, "Máximo 45 caracteres").regex(pattern_Nombre, "Formato de ciudad inválido"),
@@ -35,8 +38,15 @@ export const ClientesSchema = z.object({
         required_error: "Requerido",
     }).max(45, "Máximo 45 caracteres").regex(pattern_soloLetras, "Formato de país inválido"),
     fechnac: z.string({
-        required_error: "Requerido",
-    }).regex(/^\d{4}-\d{2}-\d{2}$/, "Formato de fecha inválido (YYYY-MM-DD)"),
+            required_error: "Requerido",
+        })
+        .regex(pattern_fecha, "Formato de fecha inválido (YYYY-MM-DD)")
+        .refine(fecha => {
+            const fechaDeNacimiento = new Date(fecha)
+            return fechaDeNacimiento <= mayorMenor
+        }, {
+            message: "Debe ser mayor de edad.",
+        }),
     categoria: z.string({
         required_error: "Requerido",
     }).max(45, "Máximo 45 caracteres").regex(pattern_soloLetras, "Formato de categoría inválido"),

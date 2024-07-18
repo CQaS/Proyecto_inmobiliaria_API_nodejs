@@ -127,7 +127,7 @@ export const crear_propiedad = async (req, res) => {
             cod_referencia,
             cliente_id,
             ...nuevoInmueble
-        } = req.body;
+        } = req.body
 
         nuevoInmueble.cod_referencia = cod_referencia
         nuevoInmueble.cliente_id = cliente_id
@@ -142,7 +142,7 @@ export const crear_propiedad = async (req, res) => {
 
         const existe_cliente = await consultarCliente(cliente_id)
 
-        if (existe_cliente.length === 0) {
+        if (existe_cliente == null) {
             return res.status(404).json({
                 Error: `ID Cliente no existe: ${cliente_id}`
             })
@@ -210,7 +210,7 @@ export const editar_propiedad = async (req, res) => {
 
         const existe_cliente = await consultarCliente(cliente_id)
 
-        if (existe_cliente.length === 0) {
+        if (existe_cliente == null) {
             return res.status(404).json({
                 Error: `ID Cliente no existe: ${cliente_id}`
             })
