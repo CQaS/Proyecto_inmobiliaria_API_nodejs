@@ -3,6 +3,8 @@ export const USER = 'root'
 export const PASSWORD = ''
 export const DATABASE = 'inmobiliaria'
 export const PORT = 3000
+export const salt = 10
+export const SECRET_KEY = 'secretomuysecreto'
 
 
 /* VALIDADORES */

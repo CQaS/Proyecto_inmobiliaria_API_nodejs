@@ -32,5 +32,6 @@ export const authUserSchema = z.object({
     is_superuser: z.boolean().default(false),
     is_staff: z.boolean().default(false),
     is_active: z.boolean().default(true),
+    last_login: z.date().nullable().default(null),
     date_joined: z.date().default(() => new Date())
 })

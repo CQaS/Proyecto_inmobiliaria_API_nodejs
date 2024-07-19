@@ -12,6 +12,11 @@ import {
 class AuthUser extends Model {}
 
 AuthUser.init({
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
     username: {
         type: DataTypes.STRING(150),
         allowNull: false,
@@ -99,6 +104,11 @@ AuthUser.init({
         type: DataTypes.BOOLEAN,
         allowNull: false,
         defaultValue: true
+    },
+    last_login: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null
     },
     date_joined: {
         type: DataTypes.DATE,

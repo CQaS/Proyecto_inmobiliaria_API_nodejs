@@ -1,12 +1,21 @@
+import passHash from 'bcryptjs'
+import {
+    crearToken
+} from '../libs/jwt.js'
 import QUERY_SEQUELIZE_AUTHUSERS from "../querys/querys.authUsers.js"
 const {
-    consultarUsers
+    consultarUsername,
+    consultarEmail,
+    guardarAuthUser,
+    consultarAuthUser
 } = QUERY_SEQUELIZE_AUTHUSERS
+
+import {
+    salt
+} from '../config.js'
 
 export const Login = async (req, res) => {
     try {
-
-        const R = await consultarUsers()
 
         return res.status(200).json({
             ok: 'Login',
@@ -39,11 +48,70 @@ export const Logout = async (req, res) => {
 }
 
 export const CrearUser = async (req, res) => {
+
+    /* {
+        "username": "newuser",
+        "first_name": "John",
+        "last_name": "Doe",
+        "email": "johndoe@example.com",
+        "password": "your_password",
+        "is_staff": true,
+        "is_active": true,
+        "is_superuser": false
+    } */
+
     try {
 
-        return res.status(200).json({
-            ok: 'crear_user'
-        })
+        const {
+            username,
+            email,
+            password,
+            ...datosAuthUserNuevo
+        } = req.body
+
+        const existeUSERNAME = await consultarUsername(username)
+        console.log(existeUSERNAME)
+
+        if (existeUSERNAME.length > 0) {
+            return res.status(404).json({
+                Error: `USERNAME ya existe: ${username}`
+            })
+        }
+
+        const existeEMAIL = await consultarEmail(email)
+        console.log(existeEMAIL)
+
+        if (existeEMAIL.length > 0) {
+            return res.status(404).json({
+                Error: `EMAIL ya existe: ${email}`
+            })
+        }
+
+        const salar = await passHash.genSalt(salt)
+        const passwordHash = await passHash.hash(password, salar)
+
+        datosAuthUserNuevo.username = username
+        datosAuthUserNuevo.email = email
+        datosAuthUserNuevo.password = passwordHash
+
+        const AuthUserGuardado = await guardarAuthUser(0, datosAuthUserNuevo)
+
+        if (AuthUserGuardado.ok) {
+
+            const token = await crearToken({
+                id: AuthUserGuardado.id_authUser_nuevo
+            })
+            res.cookie("token", token)
+
+            return res.status(200).json(AuthUserGuardado)
+        }
+
+        if (AuthUserGuardado.Error) {
+
+            return res.status(404).json({
+                Error: 'Error al guardar el AuthUser Nuevo!'
+            })
+        }
 
     } catch (err) {
         console.error(err)
@@ -56,11 +124,64 @@ export const CrearUser = async (req, res) => {
 
 export const EditarUser = async (req, res) => {
     try {
-        id = req.params.id
+        const id = req.params.id
 
-        return res.status(200).json({
-            ok: `editar_user ${id}`
-        })
+        const {
+            username,
+            email,
+            password,
+            ...datosAuthUserNuevo
+        } = req.body
+
+        const el_authUser = await consultarAuthUser(id)
+        if (el_authUser == null) {
+            return res.status(404).json({
+                Error: "AuthUser no encontrado"
+            })
+        }
+
+        if (el_authUser.username != username) {
+            const existeUSERNAME = await consultarUsername(username)
+            console.log(existeUSERNAME)
+
+            if (existeUSERNAME.length > 0) {
+                return res.status(404).json({
+                    Error: `USERNAME ya existe: ${username}`
+                })
+            }
+        }
+
+        if (el_authUser.email != email) {
+            const existeEMAIL = await consultarEmail(email)
+            console.log(existeEMAIL)
+
+            if (existeEMAIL.length > 0) {
+                return res.status(404).json({
+                    Error: `EMAIL ya existe: ${email}`
+                })
+            }
+        }
+
+        const salar = await passHash.genSalt(salt)
+        const passwordHash = await passHash.hash(password, salar)
+
+        datosAuthUserNuevo.username = username
+        datosAuthUserNuevo.email = email
+        datosAuthUserNuevo.password = passwordHash
+
+        const AuthUserGuardado = await guardarAuthUser(id, datosAuthUserNuevo)
+
+        if (AuthUserGuardado.ok) {
+
+            return res.status(200).json(AuthUserGuardado)
+        }
+
+        if (AuthUserGuardado.Error) {
+
+            return res.status(404).json({
+                Error: 'Error al guardar el AuthUser Nuevo!'
+            })
+        }
 
     } catch (err) {
         console.error(err)
