@@ -18,7 +18,7 @@ import {
 const routesAuthUsers = Router()
 
 routesAuthUsers.post('/login', validarSchemmaGenerico(authUserSchema), Login)
-routesAuthUsers.get('/logout', Logout)
+routesAuthUsers.post('/logout', Logout)
 routesAuthUsers.post('/crear_user', validarSchemmaGenerico(authUserSchema), CrearUser)
 routesAuthUsers.put('/editar_user/:id', validarSchemmaGenerico(authUserSchema), EditarUser)
 routesAuthUsers.delete('/eliminar_user/:id', EliminarUser)

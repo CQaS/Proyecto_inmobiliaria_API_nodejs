@@ -17,9 +17,64 @@ import {
 export const Login = async (req, res) => {
     try {
 
+        const {
+            username,
+            email,
+            password
+        } = req.body
+
+        let password_DB = null
+        let id = null
+
+        if (username) {
+
+            const existeUSERNAME = await consultarUsername(username)
+
+            if (existeUSERNAME.length == 0) {
+                return res.status(404).json({
+                    Error: `USERNAME no existe: ${username}`
+                })
+            }
+            console.log(existeUSERNAME)
+            password_DB = existeUSERNAME[0].dataValues.password
+            id = existeUSERNAME[0].dataValues.id
+
+        } else if (email) {
+
+            const existeEMAIL = await consultarEmail(email)
+
+            if (existeEMAIL.length == 0) {
+                return res.status(404).json({
+                    Error: `EMAIL no existe: ${email}`
+                })
+            }
+            console.log(existeEMAIL)
+            password_DB = existeEMAIL[0].dataValues.password
+            id = existeEMAIL[0].dataValues.id
+
+        } else {
+
+            return res.status(404).json({
+                Error: 'Email & Username Requiridos!!'
+            })
+        }
+
+        const password_compare = await passHash.compare(password, password_DB)
+
+        if (!password_compare) res.status(404).json({
+            Error: 'Password incorrecto!'
+        })
+
+        const token = await crearToken({
+            id
+        })
+        res.cookie("token", token)
+
         return res.status(200).json({
             ok: 'Login',
-            data: R
+            data: {
+                id
+            }
         })
 
     } catch (err) {
@@ -33,6 +88,10 @@ export const Login = async (req, res) => {
 
 export const Logout = async (req, res) => {
     try {
+
+        res.cookie("token", '', {
+            expires: new Date(0)
+        })
 
         return res.status(200).json({
             ok: 'Logout'
@@ -98,10 +157,10 @@ export const CrearUser = async (req, res) => {
 
         if (AuthUserGuardado.ok) {
 
-            const token = await crearToken({
+            /* const token = await crearToken({
                 id: AuthUserGuardado.id_authUser_nuevo
             })
-            res.cookie("token", token)
+            res.cookie("token", token) */
 
             return res.status(200).json(AuthUserGuardado)
         }
