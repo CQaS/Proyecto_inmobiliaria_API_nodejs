@@ -15,6 +15,12 @@ import {
 } from '../config.js'
 
 export const Login = async (req, res) => {
+
+    /* {
+        "username": "Yani",
+        "password": "yaniyani"
+    } */
+
     try {
 
         const {

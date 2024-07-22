@@ -4,6 +4,7 @@ import {
 } from "../config.js";
 
 export const authRequerido = (req, res, next) => {
+
     const {
         token
     } = req.cookies
@@ -16,6 +17,7 @@ export const authRequerido = (req, res, next) => {
         if (err) return res.status(401).json({
             Error: 'NO TIENES ACCESSO AUTORIZADO, TOKEN INVALIDO!'
         })
+        console.log(user)
         req.user = user
 
         console.log('token vaido')

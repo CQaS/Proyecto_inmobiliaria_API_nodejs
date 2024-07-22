@@ -14,13 +14,16 @@ import {
 import {
     authUserSchema
 } from "../schemas/AuthUsers.schemma.js"
+import {
+    authRequerido
+} from "../middleware/validarToken.middleware.js"
 
 const routesAuthUsers = Router()
 
 routesAuthUsers.post('/login', validarSchemmaGenerico(authUserSchema), Login)
 routesAuthUsers.post('/logout', Logout)
-routesAuthUsers.post('/crear_user', validarSchemmaGenerico(authUserSchema), CrearUser)
-routesAuthUsers.put('/editar_user/:id', validarSchemmaGenerico(authUserSchema), EditarUser)
-routesAuthUsers.delete('/eliminar_user/:id', EliminarUser)
+routesAuthUsers.post('/crear_user', authRequerido, validarSchemmaGenerico(authUserSchema), CrearUser)
+routesAuthUsers.put('/editar_user/:id', authRequerido, validarSchemmaGenerico(authUserSchema), EditarUser)
+routesAuthUsers.delete('/eliminar_user/:id', authRequerido, EliminarUser)
 
 export default routesAuthUsers
