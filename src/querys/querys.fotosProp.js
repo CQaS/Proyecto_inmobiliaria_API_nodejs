@@ -7,7 +7,7 @@ import {
 } from 'uuid'
 import path from 'path'
 
-import SDM from "../db/sequelize_db.js";
+import SDM from "../db/sequelize_db.js"
 const {
     sequelize
 } = SDM
@@ -21,7 +21,7 @@ import {
 const guardarFotosInmuebleNuevo = async (id, fotosVideo) => {
     try {
         const validarExtensionImagen = (ext) => {
-            const extensionesValidas = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp'];
+            const extensionesValidas = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp']
             return extensionesValidas.includes(ext)
         }
 
@@ -34,11 +34,11 @@ const guardarFotosInmuebleNuevo = async (id, fotosVideo) => {
                     const fotoNueva = await Fotos_prop.create({
                         image: nombreUnico,
                         inmueble_id: id
-                    });
+                    })
                     console.log(`ID_Foto_nueva: ${fotoNueva.id_foto}`)
 
                 } else {
-                    console.error('Formato de foto inválido:', foto.image);
+                    console.error('Formato de foto inválido:', foto.image)
                     return {
                         Error: `Formato de foto inválido: ${foto}`
                     }
@@ -58,11 +58,11 @@ const guardarFotosInmuebleNuevo = async (id, fotosVideo) => {
                 const fotoNueva = await Fotos_prop.create({
                     image: nombreUnico,
                     inmueble_id: id
-                });
+                })
                 console.log(`ID_Foto_nueva_Portada: ${fotoNueva.id_foto}`)
 
             } else {
-                console.error(`Formato de foto Portada inválida: ${fotosVideo}`);
+                console.error(`Formato de foto Portada inválida: ${fotosVideo}`)
                 return {
                     Error: `Formato de foto Portada inválida: ${fotosVideo}`
                 }
@@ -76,27 +76,27 @@ const guardarFotosInmuebleNuevo = async (id, fotosVideo) => {
 
     } catch (error) {
         if (error.name === 'SequelizeValidationError') {
-            console.error('Error de validación:', error.errors);
+            console.error('Error de validación:', error.errors)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeForeignKeyConstraintError') {
-            console.error('Error de clave foránea:', error);
+            console.error('Error de clave foránea:', error)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeDatabaseError') {
-            console.error('Error de base de datos:', error);
+            console.error('Error de base de datos:', error)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeUniqueConstraintError') {
-            console.error('Error de restricción única:', error);
+            console.error('Error de restricción única:', error)
             return {
                 Error: error
             }
         } else {
-            console.error('Error al guardar Las fotos:', error);
+            console.error('Error al guardar Las fotos:', error)
             return {
                 Error: error
             }
@@ -130,7 +130,7 @@ const eliminarFotoDeInmueble = async (id, portada) => {
             }
         }
 
-        await F.destroy();
+        await F.destroy()
         console.log(`Foto ${id} Eliminada`)
 
         return {
@@ -140,27 +140,27 @@ const eliminarFotoDeInmueble = async (id, portada) => {
 
     } catch (error) {
         if (error.name === 'SequelizeValidationError') {
-            console.error('Error de validación:', error.errors);
+            console.error('Error de validación:', error.errors)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeForeignKeyConstraintError') {
-            console.error('Error de clave foránea:', error);
+            console.error('Error de clave foránea:', error)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeDatabaseError') {
-            console.error('Error de base de datos:', error);
+            console.error('Error de base de datos:', error)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeUniqueConstraintError') {
-            console.error('Error de restricción única:', error);
+            console.error('Error de restricción única:', error)
             return {
                 Error: error
             }
         } else {
-            console.error('Error al eliminar el inmueble:', error);
+            console.error('Error al eliminar el inmueble:', error)
             return {
                 Error: error
             }

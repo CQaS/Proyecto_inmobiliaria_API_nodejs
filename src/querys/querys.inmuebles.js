@@ -3,7 +3,7 @@ import {
     Sequelize as SequelizeLib
 } from 'sequelize'
 
-import SDM from "../db/sequelize_db.js";
+import SDM from "../db/sequelize_db.js"
 const {
     sequelize
 } = SDM
@@ -18,7 +18,7 @@ const guardarInmueble = async (id, datosInmueble) => {
     try {
         if (id == 0) {
 
-            const inmuebleGuardado = await Inmueble.create(datosInmueble);
+            const inmuebleGuardado = await Inmueble.create(datosInmueble)
             console.log('Inmueble guardado:', inmuebleGuardado)
             return {
                 ok: 'Inmueble creado existosamente!',
@@ -50,27 +50,27 @@ const guardarInmueble = async (id, datosInmueble) => {
 
     } catch (error) {
         if (error.name === 'SequelizeValidationError') {
-            console.error('Error de validación:', error.errors);
+            console.error('Error de validación:', error.errors)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeForeignKeyConstraintError') {
-            console.error('Error de clave foránea:', error);
+            console.error('Error de clave foránea:', error)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeDatabaseError') {
-            console.error('Error de base de datos:', error);
+            console.error('Error de base de datos:', error)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeUniqueConstraintError') {
-            console.error('Error de restricción única:', error);
+            console.error('Error de restricción única:', error)
             return {
                 Error: error
             }
         } else {
-            console.error('Error al guardar el Inmueble:', error);
+            console.error('Error al guardar el Inmueble:', error)
             return {
                 Error: error
             }
@@ -203,21 +203,21 @@ const buscarProp_Disponible = async (id_inmueble, fecha_ing, fecha_salida) => {
                     inmueble_id: id_inmueble
                 },
                 attributes: ['image']
-            });
-        };
+            })
+        }
 
         const construirJsonInmueblesConFotos = async (inmuebles) => {
-            const inmueblesConFotos = [];
+            const inmueblesConFotos = []
 
             for (const inmueble of inmuebles) {
-                const fotos = await obtenerFotosInmueble(inmueble.id_inmueble);
+                const fotos = await obtenerFotosInmueble(inmueble.id_inmueble)
                 inmueblesConFotos.push({
                     ...inmueble,
                     fotos: fotos.map(foto => foto.image)
-                });
+                })
             }
 
-            return inmueblesConFotos;
+            return inmueblesConFotos
         }
 
         const inmueblesConFotos = await construirJsonInmueblesConFotos(R)
@@ -271,27 +271,27 @@ const eliminarPropiedad = async (id) => {
 
     } catch (error) {
         if (error.name === 'SequelizeValidationError') {
-            console.error('Error de validación:', error.errors);
+            console.error('Error de validación:', error.errors)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeForeignKeyConstraintError') {
-            console.error('Error de clave foránea:', error);
+            console.error('Error de clave foránea:', error)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeDatabaseError') {
-            console.error('Error de base de datos:', error);
+            console.error('Error de base de datos:', error)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeUniqueConstraintError') {
-            console.error('Error de restricción única:', error);
+            console.error('Error de restricción única:', error)
             return {
                 Error: error
             }
         } else {
-            console.error('Error al eliminar el inmueble:', error);
+            console.error('Error al eliminar el inmueble:', error)
             return {
                 Error: error
             }

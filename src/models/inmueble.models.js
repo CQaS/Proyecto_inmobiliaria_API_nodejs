@@ -1,4 +1,4 @@
-import SDM from "../db/sequelize_db.js";
+import SDM from "../db/sequelize_db.js"
 const {
     sequelize,
     DataTypes,

@@ -1,7 +1,7 @@
 const currentDate = new Date()
 import {
     z
-} from 'zod';
+} from 'zod'
 import {
     pattern_Nombre,
     pattern_Direccion,
@@ -50,4 +50,4 @@ export const ClientesSchema = z.object({
     categoria: z.string({
         required_error: "Requerido",
     }).max(45, "Máximo 45 caracteres").regex(pattern_soloLetras, "Formato de categoría inválido"),
-});
+})

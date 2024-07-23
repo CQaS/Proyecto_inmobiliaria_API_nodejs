@@ -2,7 +2,7 @@ import {
     Op,
     Sequelize
 } from 'sequelize'
-import SDM from "../db/sequelize_db.js";
+import SDM from "../db/sequelize_db.js"
 const {
     sequelize
 } = SDM
@@ -14,33 +14,33 @@ import {
 
 const guardarContrato = async (datosContrato) => {
     try {
-        const contratoGuardado = await Contrato.create(datosContrato);
+        const contratoGuardado = await Contrato.create(datosContrato)
         console.log('Contrato guardado:', contratoGuardado)
         return contratoGuardado
 
     } catch (error) {
         if (error.name === 'SequelizeValidationError') {
-            console.error('Error de validación:', error.errors);
+            console.error('Error de validación:', error.errors)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeForeignKeyConstraintError') {
-            console.error('Error de clave foránea:', error);
+            console.error('Error de clave foránea:', error)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeDatabaseError') {
-            console.error('Error de base de datos:', error);
+            console.error('Error de base de datos:', error)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeUniqueConstraintError') {
-            console.error('Error de restricción única:', error);
+            console.error('Error de restricción única:', error)
             return {
                 Error: error
             }
         } else {
-            console.error('Error al guardar el contrato:', error);
+            console.error('Error al guardar el contrato:', error)
             return {
                 Error: error
             }

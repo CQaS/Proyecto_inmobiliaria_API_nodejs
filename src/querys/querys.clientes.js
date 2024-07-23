@@ -3,7 +3,7 @@ import {
     Sequelize as SequelizeLib
 } from 'sequelize'
 
-import SDM from "../db/sequelize_db.js";
+import SDM from "../db/sequelize_db.js"
 const {
     sequelize
 } = SDM
@@ -99,7 +99,7 @@ const guardarCliente = async (id, datosCliente) => {
     try {
         if (id == 0) {
 
-            const clienteGuardado = await Cliente.create(datosCliente);
+            const clienteGuardado = await Cliente.create(datosCliente)
             console.log('Cliente guardado:', clienteGuardado)
             return {
                 ok: 'Cliente creado existosamente!',
@@ -131,27 +131,27 @@ const guardarCliente = async (id, datosCliente) => {
 
     } catch (error) {
         if (error.name === 'SequelizeValidationError') {
-            console.error('Error de validación:', error.errors);
+            console.error('Error de validación:', error.errors)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeForeignKeyConstraintError') {
-            console.error('Error de clave foránea:', error);
+            console.error('Error de clave foránea:', error)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeDatabaseError') {
-            console.error('Error de base de datos:', error);
+            console.error('Error de base de datos:', error)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeUniqueConstraintError') {
-            console.error('Error de restricción única:', error);
+            console.error('Error de restricción única:', error)
             return {
                 Error: error
             }
         } else {
-            console.error('Error al guardar el Inmueble:', error);
+            console.error('Error al guardar el Inmueble:', error)
             return {
                 Error: error
             }
@@ -180,27 +180,27 @@ const eliminarCliente = async (id) => {
 
     } catch (error) {
         if (error.name === 'SequelizeValidationError') {
-            console.error('Error de validación:', error.errors);
+            console.error('Error de validación:', error.errors)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeForeignKeyConstraintError') {
-            console.error('Error de clave foránea:', error);
+            console.error('Error de clave foránea:', error)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeDatabaseError') {
-            console.error('Error de base de datos:', error);
+            console.error('Error de base de datos:', error)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeUniqueConstraintError') {
-            console.error('Error de restricción única:', error);
+            console.error('Error de restricción única:', error)
             return {
                 Error: error
             }
         } else {
-            console.error('Error al eliminar el cliente:', error);
+            console.error('Error al eliminar el cliente:', error)
             return {
                 Error: error
             }

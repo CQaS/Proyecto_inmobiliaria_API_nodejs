@@ -1,6 +1,6 @@
 import {
     z
-} from 'zod';
+} from 'zod'
 
 import {
     pattern_imagen

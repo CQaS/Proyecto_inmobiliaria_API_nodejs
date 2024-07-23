@@ -22,7 +22,7 @@ async function testConnection() {
         await sequelize.authenticate()
         console.log(`Connection has been established successfully. DB : ${DATABASE}`)
     } catch (error) {
-        console.error('Unable to connect to the database:', error);
+        console.error('Unable to connect to the database:', error)
     }
 }
 

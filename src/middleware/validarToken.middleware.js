@@ -1,7 +1,7 @@
-import jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken"
 import {
     SECRET_KEY
-} from "../config.js";
+} from "../config.js"
 
 export const authRequerido = (req, res, next) => {
 
@@ -22,6 +22,6 @@ export const authRequerido = (req, res, next) => {
 
         console.log('token vaido')
 
-        next();
+        next()
     })
 }

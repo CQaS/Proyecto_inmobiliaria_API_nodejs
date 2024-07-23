@@ -3,7 +3,7 @@ import {
     Sequelize as SequelizeLib
 } from 'sequelize'
 
-import SDM from "../db/sequelize_db.js";
+import SDM from "../db/sequelize_db.js"
 const {
     sequelize
 } = SDM
@@ -43,7 +43,7 @@ const guardarAuthUser = async (id, datosAuthUser) => {
     try {
         if (id == 0) {
 
-            const autUserGuardado = await AuthUsers.create(datosAuthUser);
+            const autUserGuardado = await AuthUsers.create(datosAuthUser)
             console.log('AuthUser guardado:', autUserGuardado)
             return {
                 ok: 'AuthUser creado existosamente!',
@@ -75,27 +75,27 @@ const guardarAuthUser = async (id, datosAuthUser) => {
 
     } catch (error) {
         if (error.name === 'SequelizeValidationError') {
-            console.error('Error de validación:', error.errors);
+            console.error('Error de validación:', error.errors)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeForeignKeyConstraintError') {
-            console.error('Error de clave foránea:', error);
+            console.error('Error de clave foránea:', error)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeDatabaseError') {
-            console.error('Error de base de datos:', error);
+            console.error('Error de base de datos:', error)
             return {
                 Error: error
             }
         } else if (error.name === 'SequelizeUniqueConstraintError') {
-            console.error('Error de restricción única:', error);
+            console.error('Error de restricción única:', error)
             return {
                 Error: error
             }
         } else {
-            console.error('Error al guardar el AuthUser:', error);
+            console.error('Error al guardar el AuthUser:', error)
             return {
                 Error: error
             }

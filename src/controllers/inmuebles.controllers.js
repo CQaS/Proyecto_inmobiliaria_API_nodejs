@@ -184,7 +184,7 @@ export const editar_propiedad = async (req, res) => {
             cod_referencia,
             cliente_id,
             ...inmueble_A_Editar
-        } = req.body;
+        } = req.body
 
         inmueble_A_Editar.cod_referencia = cod_referencia
         inmueble_A_Editar.cliente_id = cliente_id

@@ -1,7 +1,7 @@
-import jwt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken'
 import {
     SECRET_KEY
-} from "../config.js";
+} from "../config.js"
 
 export const crearToken = (payload) => {
     return new Promise((resolve, reject) => {

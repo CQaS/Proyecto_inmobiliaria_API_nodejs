@@ -149,7 +149,7 @@ Clientes.init({
             },
             isValidAge(value) {
                 if (new Date(value) > mayorMenor) {
-                    throw new Error("Debe ser mayor de edad");
+                    throw new Error("Debe ser mayor de edad")
                 }
             }
         }
