@@ -2,6 +2,7 @@ import Inmueble from "./inmueble.models.js"
 import Fotos_prop from "./fotos_prop.models.js"
 import Contrato from "./contrato.models.js"
 import Cliente from "./cliente.models.js"
+import Empleado from "./empleado.models.js"
 import AuthUsers from "./authusers.models.js"
 
 /* INMUEBLE -> FOTOS */
@@ -26,5 +27,6 @@ export {
     Fotos_prop,
     Contrato,
     Cliente,
+    Empleado,
     AuthUsers
 }
