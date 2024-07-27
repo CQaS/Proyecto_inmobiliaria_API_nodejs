@@ -6,7 +6,8 @@ import {
     Logout,
     CrearUser,
     EditarUser,
-    EliminarUser
+    EliminarUser,
+    ResetPassword
 } from "../controllers/authUsers.controllers.js"
 import {
     validarSchemmaGenerico
@@ -25,5 +26,6 @@ routesAuthUsers.post('/logout', Logout)
 routesAuthUsers.post('/crear_user', authRequerido, validarSchemmaGenerico(authUserSchema), CrearUser)
 routesAuthUsers.put('/editar_user/:id', authRequerido, validarSchemmaGenerico(authUserSchema), EditarUser)
 routesAuthUsers.delete('/eliminar_user/:id', authRequerido, EliminarUser)
+routesAuthUsers.post('/reset_password', ResetPassword)
 
 export default routesAuthUsers

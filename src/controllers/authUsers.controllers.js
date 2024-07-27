@@ -7,7 +7,8 @@ const {
     consultarUsername,
     consultarEmail,
     guardarAuthUser,
-    consultarAuthUser
+    consultarAuthUser,
+    reset_password
 } = QUERY_SEQUELIZE_AUTHUSERS
 
 import {
@@ -264,6 +265,41 @@ export const EliminarUser = async (req, res) => {
         return res.status(200).json({
             ok: `eliminar_user ${id}`
         })
+
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({
+            Error: 'Algo fallo'
+        })
+
+    }
+}
+
+export const ResetPassword = async (req, res) => {
+    try {
+        const {
+            password
+        } = req.body
+
+        const salar = await passHash.genSalt(salt)
+        const passwordHash = await passHash.hash(password, salar)
+
+        const datos = req.body
+        datos.password = passwordHash
+
+        const AuthPassword = await reset_password(datos)
+
+        if (AuthPassword.ok) {
+
+            return res.status(200).json(AuthPassword)
+        }
+
+        if (AuthPassword.Error) {
+
+            return res.status(404).json({
+                Error: 'Error al guardar Password Nuevo!'
+            })
+        }
 
     } catch (err) {
         console.error(err)
