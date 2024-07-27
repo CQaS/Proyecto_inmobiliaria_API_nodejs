@@ -11,7 +11,8 @@ const {
 import {
     Inmueble,
     Fotos_prop,
-    Contrato
+    Contrato,
+    Cliente
 } from '../models/asociacion.js'
 
 const guardarInmueble = async (id, datosInmueble) => {
@@ -169,7 +170,8 @@ const buscarProp_Disponible = async (id_inmueble, fecha_ing, fecha_salida) => {
         AND(c.fecha_salida >= ':fecha_ing' AND c.fecha_ing <= ':fecha_salida') 
         WHERE i.estado = 1 
         AND c.id_contrato IS NULL 
-        AND NOT EXISTS(SELECT 1 FROM contrato c2 WHERE c2.inmueble_id = i.id_inmueble AND(c2.fecha_salida >= ':fecha_ing' AND c2.fecha_ing <= ':fecha_salida'))
+        AND NOT EXISTS(SELECT 1 FROM contrato c2 WHERE c2.inmueble_id = i.id_inmueble 
+        AND(c2.fecha_salida >= ':fecha_ing' AND c2.fecha_ing <= ':fecha_salida'))
         `, {
         replacements: {
             fecha_ing,
@@ -179,20 +181,23 @@ const buscarProp_Disponible = async (id_inmueble, fecha_ing, fecha_salida) => {
     })
 
     if (id_inmueble != 0) {
+        console.log(R)
 
         for (const i of R) {
 
-            if (i.id_inmueble === id_inmueble) {
-                console.log('SI Esta')
+            if (i.id_inmueble == id_inmueble) {
+                console.log('SI esta disponible')
                 return {
-                    res: 1
+                    ok: 'si esta disponible',
+                    resultado: 1
                 }
             }
         }
 
-        console.log('NO Esta')
+        console.log('NO esta disponible')
         return {
-            res: 0
+            ok: 'No esta disponible',
+            resultado: 0
         }
 
     } else {
@@ -299,6 +304,20 @@ const eliminarPropiedad = async (id) => {
     }
 }
 
+const contratoCodRef2 = async (codRef) => {
+    await Inmueble.sync()
+    return await Inmueble.findOne({
+        where: {
+            cod_referencia: codRef,
+            estado: 1
+        },
+        include: [{
+            model: Cliente,
+            as: 'cliente' // Esto debe coincidir con el alias definido en la asociación
+        }]
+    })
+}
+
 const QUERY_SEQUELIZE_INMUEBLES = {
     guardarInmueble,
     listarInmuebles,
@@ -310,7 +329,8 @@ const QUERY_SEQUELIZE_INMUEBLES = {
     buscarProp_Disponible,
     idInmueble_codRef,
     eliminarPropiedad,
-    consultarCodRef
+    consultarCodRef,
+    contratoCodRef2
 }
 
 export default QUERY_SEQUELIZE_INMUEBLES

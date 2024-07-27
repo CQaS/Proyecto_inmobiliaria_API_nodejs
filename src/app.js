@@ -3,6 +3,7 @@ import morgan from 'morgan'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import routes from './router/index.js'
+import bodyParser from 'body-parser'
 
 const app = express()
 
@@ -10,6 +11,9 @@ app.use(cors())
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(cookieParser())
+app.use(bodyParser.urlencoded({
+    extended: true
+}))
 
 routes.forEach(({
     path,

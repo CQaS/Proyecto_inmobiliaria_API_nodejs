@@ -1,6 +1,7 @@
 import routesInmuebles from './inmuebles.routes.js'
 import routesClientes from './clientes.routes.js'
 import routesEmpleados from './empleados.routes.js'
+import routesContratos from './contratos.routes.js'
 import AuthUser from './authusers.routes.js'
 
 export default [{
@@ -14,6 +15,10 @@ export default [{
     {
         path: '/empleados',
         router: routesEmpleados
+    },
+    {
+        path: '/contratos',
+        router: routesContratos
     },
     {
         path: '/authusers',

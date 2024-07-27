@@ -55,7 +55,7 @@ export const crear_cliente = async (req, res) => {
         const existeDNI = await consultarDni(dni_cliente)
         console.log(existeDNI)
 
-        if (existeDNI.length > 0) {
+        if (existeDNI != null) {
             return res.status(404).json({
                 Error: `DNI ya existe: ${dni_cliente}`
             })

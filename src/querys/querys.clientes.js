@@ -24,7 +24,7 @@ const consultarCliente = async (id) => {
 
 const consultarDni = async (dni) => {
     await Cliente.sync()
-    return await Cliente.findAll({
+    return await Cliente.findOne({
         where: {
             dni_cliente: dni
         }

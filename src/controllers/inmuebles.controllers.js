@@ -440,9 +440,19 @@ export const inmueble_indisponible = async (req, res) => {
         console.log(nuevoContrato)
 
         const ContratoGuardado = await guardarContrato(nuevoContrato)
-        return res.status(200).json({
-            inmueble_indisponible: ContratoGuardado
-        })
+        if (ContratoGuardado.ok) {
+
+            return res.status(200).json({
+                inmueble_indisponible: ContratoGuardado
+            })
+        }
+
+        if (ContratoGuardado.Error) {
+
+            return res.status(404).json({
+                Error: 'Error al guardar el Contrato!'
+            })
+        }
 
     } catch (err) {
         console.error(err)

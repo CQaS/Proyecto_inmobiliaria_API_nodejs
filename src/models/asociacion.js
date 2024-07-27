@@ -15,11 +15,41 @@ Fotos_prop.belongsTo(Inmueble, {
 })
 
 /* INMUEBLE -> CONTRATOS */
+// Un inmueble puede tener muchos contratos
 Inmueble.hasMany(Contrato, {
-    foreignKey: 'inmueble_id'
-})
+    foreignKey: 'inmueble_id',
+    as: 'contratos'
+});
+
+// Un contrato pertenece a un inmueble
 Contrato.belongsTo(Inmueble, {
-    foreignKey: 'inmueble_id'
+    foreignKey: 'inmueble_id',
+    as: 'inmueble'
+});
+
+/* CLIENTE -> CONTRATOS */
+// Un cliente puede tener muchos contratos
+Cliente.hasMany(Contrato, {
+    foreignKey: 'cliente_id',
+    as: 'contratos'
+});
+
+// Un contrato pertenece a un cliente
+Contrato.belongsTo(Cliente, {
+    foreignKey: 'cliente_id',
+    as: 'cliente'
+});
+
+// Un cliente puede tener muchos inmuebles
+Cliente.hasMany(Inmueble, {
+    foreignKey: 'cliente_id',
+    as: 'inmuebles'
+});
+
+// Un inmueble pertenece a un cliente
+Inmueble.belongsTo(Cliente, {
+    foreignKey: 'cliente_id',
+    as: 'cliente'
 })
 
 export {
