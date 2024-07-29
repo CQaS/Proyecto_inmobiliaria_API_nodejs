@@ -2,6 +2,7 @@ import QUERY_SEQUELIZE_CONTRATOS from "../querys/querys.contratos.js"
 const {
     guardarContrato,
     con_Detalles,
+    reportesJsonT
 } = QUERY_SEQUELIZE_CONTRATOS
 import QUERY_SEQUELIZE_CLIENTES from "../querys/querys.clientes.js"
 const {
@@ -210,6 +211,22 @@ export const crearContrato = async (req, res) => {
         }
 
 
+
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({
+            Error: 'Algo fallo'
+        })
+
+    }
+}
+
+export const reportes_json_t = async (req, res) => {
+    try {
+
+        const _reportesJsonT = await reportesJsonT()
+        console.log(_reportesJsonT)
+        res.json(_reportesJsonT)
 
     } catch (err) {
         console.error(err)

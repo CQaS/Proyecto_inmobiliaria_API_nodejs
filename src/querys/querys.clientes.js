@@ -82,6 +82,16 @@ const clienteLocNombre = async (nombre) => {
     })
 }
 
+const reportesJsonC = async (nombre) => {
+    await Cliente.sync()
+    return await Cliente.findAll({
+        where: {
+            categoria: 'Locatario',
+            estado: 1
+        }
+    })
+}
+
 const clientePropNombre = async (nombre) => {
     await Cliente.sync()
     return await Cliente.findAll({
@@ -90,6 +100,16 @@ const clientePropNombre = async (nombre) => {
             nom_cliente: {
                 [Op.like]: `%${nombre}%`
             },
+            estado: 1
+        }
+    })
+}
+
+const reportesJsonP = async (nombre) => {
+    await Cliente.sync()
+    return await Cliente.findAll({
+        where: {
+            categoria: 'Propietario',
             estado: 1
         }
     })
@@ -236,7 +256,9 @@ const QUERY_SEQUELIZE_CLIENTES = {
     clientePropNombre,
     guardarCliente,
     reciboCliente,
-    eliminarCliente
+    eliminarCliente,
+    reportesJsonC,
+    reportesJsonP
 }
 
 export default QUERY_SEQUELIZE_CLIENTES

@@ -10,7 +10,9 @@ const {
     clientePropNombre,
     guardarCliente,
     reciboCliente,
-    eliminarCliente
+    eliminarCliente,
+    reportesJsonC,
+    reportesJsonP
 } = QUERY_SEQUELIZE_CLIENTES
 
 export const clientes_lista = async (req, res) => {
@@ -234,6 +236,36 @@ export const cliente_prop_nombre = async (req, res) => {
             Error: 'Cliente no encontrado!'
         }
         res.json(_clientepropnombre)
+
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({
+            Error: 'Algo fallo'
+        })
+
+    }
+}
+
+export const reportes_json_c = async (req, res) => {
+    try {
+        const _reportesJsonC = await reportesJsonC()
+        console.log(_reportesJsonC)
+        res.json(_reportesJsonC)
+
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({
+            Error: 'Algo fallo'
+        })
+
+    }
+}
+
+export const reportes_json_p = async (req, res) => {
+    try {
+        const _reportesJsonP = await reportesJsonP()
+        console.log(_reportesJsonP)
+        res.json(_reportesJsonP)
 
     } catch (err) {
         console.error(err)

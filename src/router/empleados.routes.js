@@ -6,7 +6,8 @@ import {
     crear_empleado,
     editar_empleado,
     recibo_empleado,
-    eliminar_empleado
+    eliminar_empleado,
+    reportes_json_e
 } from "../controllers/empleados.controllers.js"
 import {
     validarSchemmaGenerico
@@ -19,6 +20,7 @@ const routesEmpleados = Router()
 
 routesEmpleados.get('/empleados_lista', empleados_lista)
 routesEmpleados.get('/recibo_empleado/:id', recibo_empleado)
+routesEmpleados.get('/reportes_json_e', reportes_json_e)
 routesEmpleados.post('/crear_empleado', validarSchemmaGenerico(EmpleadosSchema), crear_empleado)
 routesEmpleados.put('/editar_empleado/:id', validarSchemmaGenerico(EmpleadosSchema), editar_empleado)
 routesEmpleados.delete('/eliminar_empleado/:id', eliminar_empleado)

@@ -1,6 +1,7 @@
 import {
     Op,
-    Sequelize as SequelizeLib
+    Sequelize as SequelizeLib,
+    literal
 } from 'sequelize'
 
 import SDM from "../db/sequelize_db.js"
@@ -90,6 +91,114 @@ const listarInmuebles = async () => {
             as: 'fotos', // Nombre de la asociación
         }]
     })
+}
+
+const listarInmuebles_tipo_p = async (tipo_p) => {
+    await Inmueble.sync()
+    return await Inmueble.findAll({
+        where: {
+            tipo_inmueble: tipo_p,
+            estado: 1
+        },
+        include: [{
+            model: Fotos_prop,
+            as: 'fotos', // Nombre de la asociación
+        }]
+    })
+}
+
+const listarInmuebles_tipo_o = async (tipo_o, fecha1, fecha2) => {
+    await Inmueble.sync()
+    return await Inmueble.findAll({
+        where: {
+            tipo_operacion: tipo_o,
+            estado: 1
+        },
+        include: [{
+            model: Contrato,
+            as: 'contratos',
+            where: {
+                [Op.or]: [{
+                        fecha_ing: {
+                            [Op.notBetween]: [fecha1, fecha2]
+                        }
+                    },
+                    {
+                        fecha_salida: {
+                            [Op.notBetween]: [fecha1, fecha2]
+                        }
+                    }
+                ]
+            },
+            required: false
+        }],
+        having: literal('COUNT(contratos.id_contrato) = 0'),
+        group: ['Inmueble.id_inmueble']
+    });
+
+}
+
+const listarInmuebles_tipo_o_p = async (tipo_o, tipo_p, fecha1, fecha2) => {
+    await Inmueble.sync()
+    return await Inmueble.findAll({
+        where: {
+            tipo_operacion: tipo_o,
+            tipo_inmueble: tipo_p,
+            estado: 1
+        },
+        include: [{
+            model: Contrato,
+            as: 'contratos',
+            where: {
+                [Op.or]: [{
+                        fecha_ing: {
+                            [Op.notBetween]: [fecha1, fecha2]
+                        }
+                    },
+                    {
+                        fecha_salida: {
+                            [Op.notBetween]: [fecha1, fecha2]
+                        }
+                    }
+                ]
+            },
+            required: false
+        }],
+        having: literal('COUNT(contratos.id_contrato) = 0'),
+        group: ['Inmueble.id_inmueble']
+    });
+
+}
+
+const listarInmuebles_tipo_o_venta = async (tipo_o) => {
+    await Inmueble.sync()
+    return await Inmueble.findAll({
+        where: {
+            tipo_operacion: tipo_o,
+            estado: 1
+        },
+        include: [{
+            model: Fotos_prop,
+            as: 'fotos', // Nombre de la asociación
+        }]
+    });
+
+}
+
+const listarInmuebles_tipo_o_p_venta = async (tipo_o, tipo_p) => {
+    await Inmueble.sync()
+    return await Inmueble.findAll({
+        where: {
+            tipo_inmueble: tipo_p,
+            tipo_operacion: tipo_o,
+            estado: 1
+        },
+        include: [{
+            model: Fotos_prop,
+            as: 'fotos', // Nombre de la asociación
+        }]
+    });
+
 }
 
 const listarExclusivos = async () => {
@@ -318,6 +427,22 @@ const contratoCodRef2 = async (codRef) => {
     })
 }
 
+const reportesJsonI = async () => {
+    await Inmueble.sync()
+    return await Inmueble.findAll({
+        where: {
+            estado: 1
+        },
+        include: [{
+            model: Cliente,
+            as: 'cliente' // Esto debe coincidir con el alias definido en la asociación
+        }, {
+            model: Fotos_prop,
+            as: 'fotos' // Esto debe coincidir con el alias definido en la asociación
+        }]
+    })
+}
+
 const QUERY_SEQUELIZE_INMUEBLES = {
     guardarInmueble,
     listarInmuebles,
@@ -330,7 +455,13 @@ const QUERY_SEQUELIZE_INMUEBLES = {
     idInmueble_codRef,
     eliminarPropiedad,
     consultarCodRef,
-    contratoCodRef2
+    contratoCodRef2,
+    reportesJsonI,
+    listarInmuebles_tipo_p,
+    listarInmuebles_tipo_o,
+    listarInmuebles_tipo_o_p,
+    listarInmuebles_tipo_o_venta,
+    listarInmuebles_tipo_o_p_venta
 }
 
 export default QUERY_SEQUELIZE_INMUEBLES

@@ -1,10 +1,14 @@
-export const HOST = 'localhost'
-export const USER = 'root'
-export const PASSWORD = ''
-export const DATABASE = 'inmobiliaria'
-export const PORT = 3000
-export const salt = 10
-export const SECRET_KEY = 'secretomuysecreto'
+import dotenv from 'dotenv'
+
+dotenv.config()
+
+export const HOST = process.env.HOST
+export const USER = process.env.USER
+export const PASSWORD = process.env.PASSWORD
+export const DATABASE = process.env.DATABASE
+export const PORT = process.env.PORT
+export const salt = process.env.salt
+export const SECRET_KEY = process.env.SECRET_KEY
 
 
 /* VALIDADORES */

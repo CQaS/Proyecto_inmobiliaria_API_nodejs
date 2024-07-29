@@ -24,6 +24,21 @@ export const empleados_lista = async (req, res) => {
     }
 }
 
+export const reportes_json_e = async (req, res) => {
+    try {
+        const _reportesJsonE = await listarEmpleados()
+        console.log(_reportesJsonE)
+        res.json(_reportesJsonE)
+
+    } catch (err) {
+        console.error(err)
+        return res.status(500).json({
+            Error: 'Algo fallo'
+        })
+
+    }
+}
+
 export const crear_empleado = async (req, res) => {
 
     /* {

@@ -97,9 +97,56 @@ const con_Detalles = async (id_contrato) => {
     }
 }
 
+const reportesJsonT = async () => {
+    try {
+        const reportes_json_t = await sequelize.query(`
+        SELECT c.*, cl.*, i.*, clP.nom_cliente as nom_prop
+        FROM contrato c
+        JOIN clientes cl ON c.cliente_id = cl.id_cliente
+        JOIN inmueble i ON c.inmueble_id = i.id_inmueble
+        JOIN clientes clP ON clP.id_cliente = i.cliente_id
+        `, {
+            type: SequelizeLib.QueryTypes.SELECT
+        })
+
+        console.log('Contratos:', reportes_json_t)
+
+        return reportes_json_t
+
+    } catch (error) {
+        if (error.name === 'SequelizeValidationError') {
+            console.error('Error de validación:', error.errors)
+            return {
+                Error: error
+            }
+        } else if (error.name === 'SequelizeForeignKeyConstraintError') {
+            console.error('Error de clave foránea:', error)
+            return {
+                Error: error
+            }
+        } else if (error.name === 'SequelizeDatabaseError') {
+            console.error('Error de base de datos:', error)
+            return {
+                Error: error
+            }
+        } else if (error.name === 'SequelizeUniqueConstraintError') {
+            console.error('Error de restricción única:', error)
+            return {
+                Error: error
+            }
+        } else {
+            console.error('Error al buscar los contratos:', error)
+            return {
+                Error: error
+            }
+        }
+    }
+}
+
 const QUERY_SEQUELIZE_CONTRATOS = {
     guardarContrato,
-    con_Detalles
+    con_Detalles,
+    reportesJsonT
 }
 
 export default QUERY_SEQUELIZE_CONTRATOS

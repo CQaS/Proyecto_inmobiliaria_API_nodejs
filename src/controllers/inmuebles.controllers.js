@@ -59,7 +59,13 @@ const {
     buscarProp_Disponible,
     idInmueble_codRef,
     eliminarPropiedad,
-    consultarCodRef
+    consultarCodRef,
+    reportesJsonI,
+    listarInmuebles_tipo_p,
+    listarInmuebles_tipo_o,
+    listarInmuebles_tipo_o_p,
+    listarInmuebles_tipo_o_venta,
+    listarInmuebles_tipo_o_p_venta
 } = QUERY_SEQUELIZE_INMUEBLES
 
 import QUERY_SEQUELIZE_CONTRATOS from "../querys/querys.contratos.js"
@@ -340,13 +346,118 @@ export const buscar_por_fechas = async (req, res) => {
     }
 }
 
-export const propiedad_por_tipo = async (req, res) => {
+export const reportes_json_i = async (req, res) => {
     try {
-        res.json({
-            propiedad_por_tipo: 'propiedad_por_tipo'
-        })
+        const _reportesJsonI = await reportesJsonI()
+        console.log(_reportesJsonI)
+        res.json(_reportesJsonI)
 
     } catch (err) {
+        console.error(err)
+        return res.status(500).json({
+            Error: 'Algo fallo'
+        })
+
+    }
+}
+
+export const propiedad_por_tipo = async (req, res) => {
+    try {
+        const {
+            tipo_o,
+            tipo_p,
+            f_1,
+            f_2
+        } = req.query
+
+        const hoy = new Date();
+        let fecha_formateada = hoy.toISOString().split('T')[0]
+        let fecha_formateada2 = hoy.toISOString().split('T')[0]
+
+        if (f_1 && f_2) {
+            fecha_formateada = f_1
+            fecha_formateada2 = f_2
+        }
+
+        if (tipo_p && !tipo_o) {
+
+            console.log(`Tipo Operacion = null, Tipo Propiedad = ${tipo_p}`)
+
+            const _listarInmuebles_tipo_p = await listarInmuebles_tipo_p(tipo_p)
+
+            return res.status(200).json({
+                count: _listarInmuebles_tipo_p.length,
+                ok: _listarInmuebles_tipo_p
+            })
+
+        } else if (tipo_o && (tipo_o == 'Alquiler temporario' || tipo_o == 'Alquiler permanente') && !tipo_p) {
+
+            console.log(`Tipo Operacion = ${tipo_o}, Tipo Propiedad = null`)
+
+            const _listarInmuebles_tipo_o = await listarInmuebles_tipo_o(tipo_o, fecha_formateada, fecha_formateada2)
+
+            return res.status(200).json({
+                count: _listarInmuebles_tipo_o.length,
+                ok: _listarInmuebles_tipo_o
+            })
+
+        } else if (tipo_o && (tipo_o == 'Alquiler temporario' || tipo_o == 'Alquiler permanente') && tipo_p) {
+
+            console.log(`Tipo Operacion = ${tipo_o}, Tipo Propiedad = ${tipo_p}`)
+
+            const _listarInmuebles_tipo_o_p = await listarInmuebles_tipo_o_p(tipo_o, tipo_p, fecha_formateada, fecha_formateada2)
+
+            return res.status(200).json({
+                count: _listarInmuebles_tipo_o_p.length,
+                ok: _listarInmuebles_tipo_o_p
+            })
+
+        } else if (tipo_o && tipo_o == 'Venta' && !tipo_p) {
+
+            console.log(`Tipo Operacion = ${tipo_o}, Tipo Propiedad = null`)
+
+            const _listarInmuebles_tipo_o_venta = await listarInmuebles_tipo_o_venta(tipo_o)
+
+            return res.status(200).json({
+                count: _listarInmuebles_tipo_o_venta.length,
+                ok: _listarInmuebles_tipo_o_venta
+            })
+
+
+        } else if (tipo_o && tipo_o == 'Venta' && tipo_p) {
+
+            console.log(`Tipo Operacion = ${tipo_o}, Tipo Propiedad = ${tipo_p}`)
+
+            const _listarInmuebles_tipo_o_p_venta = await listarInmuebles_tipo_o_p_venta(tipo_o, tipo_p)
+
+            return res.status(200).json({
+                count: _listarInmuebles_tipo_o_p_venta.length,
+                ok: _listarInmuebles_tipo_o_p_venta
+            })
+
+        } else if ((!tipo_p && !tipo_o) && (f_1 && f_2)) {
+
+            console.log(`Tipo Operacion = null, Tipo Propiedad = null - Busca entre fechas: ${fecha_formateada} - ${fecha_formateada2}`)
+
+            const _buscarProp_Disponible = await buscarProp_Disponible(0, fecha_formateada, fecha_formateada2)
+            return res.status(200).json({
+                count: _buscarProp_Disponible.length,
+                ok: _buscarProp_Disponible
+            })
+        } else if (
+            !tipo_o &&
+            !tipo_p &&
+            !f_1 &&
+            !f_2
+        ) {
+            console.log('Selecciona una busqueda correcta!')
+            return res.status(404).json({
+                Error: 'Selecciona una busqueda correcta!'
+            })
+        }
+
+    } catch (err) {
+
         console.error(err)
         return res.status(500).json({
             Error: 'Algo fallo'
