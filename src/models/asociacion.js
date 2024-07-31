@@ -4,6 +4,7 @@ import Contrato from "./contrato.models.js"
 import Cliente from "./cliente.models.js"
 import Empleado from "./empleado.models.js"
 import AuthUsers from "./authusers.models.js"
+import Block from "./block.models.js"
 
 /* INMUEBLE -> FOTOS */
 Inmueble.hasMany(Fotos_prop, {
@@ -58,5 +59,6 @@ export {
     Contrato,
     Cliente,
     Empleado,
-    AuthUsers
+    AuthUsers,
+    Block
 }

@@ -8,7 +8,9 @@ const {
     consultarEmail,
     guardarAuthUser,
     consultarAuthUser,
-    reset_password
+    reset_password,
+    verificarBloqueado,
+    crearBlock
 } = QUERY_SEQUELIZE_AUTHUSERS
 
 import {
@@ -32,6 +34,8 @@ export const Login = async (req, res) => {
 
         let password_DB = null
         let id = null
+        let usernameEmail = null
+        let block = null
 
         if (username) {
 
@@ -46,6 +50,9 @@ export const Login = async (req, res) => {
             password_DB = existeUSERNAME[0].dataValues.password
             id = existeUSERNAME[0].dataValues.id
 
+            block = await verificarBloqueado(username)
+            usernameEmail = username
+
         } else if (email) {
 
             const existeEMAIL = await consultarEmail(email)
@@ -59,6 +66,9 @@ export const Login = async (req, res) => {
             password_DB = existeEMAIL[0].dataValues.password
             id = existeEMAIL[0].dataValues.id
 
+            block = await verificarBloqueado(email)
+            usernameEmail = email
+
         } else {
 
             return res.status(404).json({
@@ -66,11 +76,47 @@ export const Login = async (req, res) => {
             })
         }
 
+        // Verificar si el usuario está bloqueado
+
         const password_compare = await passHash.compare(password, password_DB)
 
-        if (!password_compare) res.status(404).json({
-            Error: 'Password incorrecto!'
-        })
+        if (!password_compare) {
+
+            if (block) {
+
+                if (block.attempts >= 5) {
+                    block.blocked_until = new Date(Date.now() + 15 * 60 * 1000) // Bloquear por 15 minutos
+                    await crearBlock(2, block)
+
+                    return res.status(403).json({
+                        Error: 'Demasiados intentos fallidos de inicio de sesión. Por favor, inténtelo de nuevo más tarde.'
+                    })
+                }
+
+                block.attempts += 1
+                block.last_attempt = new Date()
+                console.log(`INTENTOS..............: ${block.attempts}`)
+
+                await crearBlock(2, block)
+
+            } else {
+
+                await crearBlock(1, {
+                    user_email: usernameEmail,
+                    attempts: 1,
+                    last_attempt: new Date()
+                })
+            }
+
+            return res.status(404).json({
+                Error: 'Password incorrecto!'
+            })
+        }
+
+        // Restablecer intentos fallidos en caso de éxito
+        if (block) {
+            await crearBlock(0, usernameEmail)
+        }
 
         const token = await crearToken({
             id

@@ -155,8 +155,13 @@ export const crear_propiedad = async (req, res) => {
         }
 
         const InmuebleGuardado = await guardarInmueble(0, nuevoInmueble)
-        const FotosGuardadas = await guardarFotosInmuebleNuevo(InmuebleGuardado.id_inmueble_nuevo, fotos)
-        const FotosPortadaGuardada = await guardarFotosInmuebleNuevo(InmuebleGuardado.id_inmueble_nuevo, imgportada)
+        let FotosGuardadas = null
+        let FotosPortadaGuardada = null
+        if (InmuebleGuardado.ok) {
+
+            FotosGuardadas = await guardarFotosInmuebleNuevo(InmuebleGuardado.id_inmueble_nuevo, fotos)
+            FotosPortadaGuardada = await guardarFotosInmuebleNuevo(InmuebleGuardado.id_inmueble_nuevo, imgportada)
+        }
 
         if (InmuebleGuardado.ok && FotosGuardadas.ok && FotosPortadaGuardada.ok) {
 

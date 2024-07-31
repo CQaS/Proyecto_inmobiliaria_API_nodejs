@@ -9,7 +9,8 @@ const {
 } = SDM
 
 import {
-    AuthUsers
+    AuthUsers,
+    Block
 } from '../models/asociacion.js'
 
 const consultarAuthUser = async (id) => {
@@ -155,12 +156,85 @@ const reset_password = async (datos) => {
     }
 }
 
+const verificarBloqueado = async (username_email) => {
+    await Block.sync()
+    return await Block.findOne({
+        where: {
+            user_email: username_email
+        }
+    })
+}
+
+const crearBlock = async (bandera, dataBlock) => {
+    try {
+        if (bandera == 1) {
+
+            const data_block = await Block.create(dataBlock)
+            console.log('Block guardado:', data_block)
+            return {
+                ok: 'Block creado existosamente!',
+                data: data_block,
+            }
+
+        } else if (bandera == 2) {
+            await dataBlock.save()
+            return {
+                ok: 'Block actualizado existosamente!'
+            }
+
+        } else {
+
+            Block.destroy({
+                where: {
+                    user_email: dataBlock
+                }
+            })
+
+            return {
+                ok: "Block eliminado exitosamente!",
+                data: datosAuthUser
+            }
+        }
+
+
+    } catch (error) {
+        if (error.name === 'SequelizeValidationError') {
+            console.error('Error de validación:', error.errors)
+            return {
+                Error: error
+            }
+        } else if (error.name === 'SequelizeForeignKeyConstraintError') {
+            console.error('Error de clave foránea:', error)
+            return {
+                Error: error
+            }
+        } else if (error.name === 'SequelizeDatabaseError') {
+            console.error('Error de base de datos:', error)
+            return {
+                Error: error
+            }
+        } else if (error.name === 'SequelizeUniqueConstraintError') {
+            console.error('Error de restricción única:', error)
+            return {
+                Error: error
+            }
+        } else {
+            console.error('Error al guardar el AuthUser:', error)
+            return {
+                Error: error
+            }
+        }
+    }
+}
+
 const QUERY_SEQUELIZE_AUTHUSERS = {
     consultarUsername,
     consultarEmail,
     guardarAuthUser,
     consultarAuthUser,
-    reset_password
+    reset_password,
+    verificarBloqueado,
+    crearBlock
 }
 
 export default QUERY_SEQUELIZE_AUTHUSERS
