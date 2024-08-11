@@ -76,17 +76,20 @@ export const Login = async (req, res) => {
             })
         }
 
-        // Verificar si el usuario está bloqueado
 
         const password_compare = await passHash.compare(password, password_DB)
 
         if (!password_compare) {
 
+            // Verificar si el usuario está bloqueado
             if (block) {
 
                 if (block.attempts >= 5) {
+
                     block.blocked_until = new Date(Date.now() + 15 * 60 * 1000) // Bloquear por 15 minutos
-                    await crearBlock(2, block)
+
+                    const dataBlock = await crearBlock(2, block)
+                    console.log(dataBlock)
 
                     return res.status(403).json({
                         Error: 'Demasiados intentos fallidos de inicio de sesión. Por favor, inténtelo de nuevo más tarde.'
@@ -97,15 +100,17 @@ export const Login = async (req, res) => {
                 block.last_attempt = new Date()
                 console.log(`INTENTOS..............: ${block.attempts}`)
 
-                await crearBlock(2, block)
+                const dataBlock = await crearBlock(2, block)
+                console.log(dataBlock)
 
             } else {
 
-                await crearBlock(1, {
+                const dataBlock = await crearBlock(1, {
                     user_email: usernameEmail,
                     attempts: 1,
                     last_attempt: new Date()
                 })
+                console.log(dataBlock)
             }
 
             return res.status(404).json({
@@ -115,7 +120,8 @@ export const Login = async (req, res) => {
 
         // Restablecer intentos fallidos en caso de éxito
         if (block) {
-            await crearBlock(0, usernameEmail)
+            const dataBlock = await crearBlock(0, usernameEmail)
+            console.log(dataBlock)
         }
 
         const token = await crearToken({
