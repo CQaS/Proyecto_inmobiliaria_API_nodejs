@@ -1,19 +1,17 @@
-const cargarFunciones = () => {
+import {
+    pageFunctions
+} from './page.controller.js'
 
-    const routeHandlers = {
-        'inmuebles.html': window.api.getInmuebles,
-        'clientes.html': window.api.getClientes,
+const init = () => {
+    const path = window.location.pathname
+    const page = path.substring(path.lastIndexOf('/') + 1)
 
-    }
-
-    const path = window.location.pathname.split('/').pop();
-    const handler = routeHandlers[path];
-
-    if (handler) {
-        handler()
+    if (pageFunctions[page]) {
+        pageFunctions[page]()
     } else {
-        console.error('No handler found for', path)
+        console.error('No hay función definida para la página:', page)
+        _alerta('No hay función definida para la página', 'error')
     }
 }
 
-document.addEventListener('DOMContentLoaded', cargarFunciones)
+init()

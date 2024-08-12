@@ -205,7 +205,7 @@ export const CrearUser = async (req, res) => {
             })
         }
 
-        const salar = await passHash.genSalt(salt)
+        const salar = await passHash.genSalt(Number(salt))
         const passwordHash = await passHash.hash(password, salar)
 
         datosAuthUserNuevo.username = username
@@ -280,7 +280,7 @@ export const EditarUser = async (req, res) => {
             }
         }
 
-        const salar = await passHash.genSalt(salt)
+        const salar = await passHash.genSalt(Number(salt))
         const passwordHash = await passHash.hash(password, salar)
 
         datosAuthUserNuevo.username = username
@@ -333,7 +333,7 @@ export const ResetPassword = async (req, res) => {
             password
         } = req.body
 
-        const salar = await passHash.genSalt(salt)
+        const salar = await passHash.genSalt(Number(salt))
         const passwordHash = await passHash.hash(password, salar)
 
         const datos = req.body

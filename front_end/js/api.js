@@ -1,42 +1,42 @@
+import {
+    renderInmuebles,
+    renderClientes
+} from './render.js'
+
 const apiUrl = 'http://localhost:3000/api'
 
+//////ALERTAS////////
 
-const getInmuebles = () => {
+const _alerta = (texto, icon) => {
 
-    axios.get(`${apiUrl}/inmuebles/inmuebles_lista`)
-        .then(response => {
-            console.log(response.data)
+    const iconosPermitidos = ['success', 'error', 'warning', 'info', 'question']
+    const iconTipo = iconosPermitidos.includes(icon) ? icon : 'info'
 
-            const inmueblesList = document.getElementById('inmuebles-lista')
-            inmueblesList.innerHTML = response.data.map(inmueble =>
-                `<li>${inmueble.dir_inmueble}</li>`).join('')
-            return inmueblesList
-        })
-        .catch(error => {
-            console.error('Error al obtener inmuebles:', error)
-            return error
-        })
+    Swal.fire({
+        icon: iconTipo,
+        title: 'Alerta',
+        text: `${texto}`
+    })
 }
 
-const getClientes = () => {
+export const getInmuebles = async () => {
+    try {
+        const response = await axios.get(`${apiUrl}/inmuebles/inmuebles_lista`)
+        renderInmuebles(response.data)
 
-    axios.get(`${apiUrl}/clientes/clientes_lista`)
-        .then(response => {
-            console.log(response.data)
-
-            const clientesList = document.getElementById('clientes-lista')
-            clientesList.innerHTML = response.data.map(cliente =>
-                `<li>${cliente.nom_cliente}</li>`).join('')
-            return clientesList
-        })
-        .catch(error => {
-            console.error('Error al obtener clientes:', error)
-            return error
-        })
+    } catch (error) {
+        _alerta('Error fetching inmuebles:', 'error')
+        throw error
+    }
 }
 
+export const getClientes = async () => {
+    try {
+        const response = await axios.get(`${apiUrl}/clientes/clientes_lista`)
+        renderClientes(response.data)
 
-window.api = {
-    getInmuebles,
-    getClientes
+    } catch (error) {
+        _alerta('Error fetching clientes:', 'error')
+        throw error
+    }
 }

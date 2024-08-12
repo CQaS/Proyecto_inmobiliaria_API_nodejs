@@ -7,7 +7,13 @@ import bodyParser from 'body-parser'
 
 const app = express()
 
-app.use(cors())
+const corsOptions = {
+    origin: ['http://127.0.0.1:5500'], // Puedes agregar más orígenes si es necesario
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true // Permitir cookies y otros encabezados de autenticación
+}
+
+app.use(cors(corsOptions))
 app.use(morgan('dev'))
 app.use(express.json())
 app.use(cookieParser())
