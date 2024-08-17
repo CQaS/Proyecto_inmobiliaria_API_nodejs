@@ -97,7 +97,7 @@ export const Login = async (req, res) => {
             }
 
             return res.status(404).json({
-                Error: 'Password incorrecto!'
+                Error: 'Username o Password incorrecto!'
             })
         }
 

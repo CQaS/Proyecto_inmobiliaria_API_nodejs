@@ -1,6 +1,8 @@
 import express from 'express'
 import morgan from 'morgan'
 import cors from 'cors'
+import fs from 'fs'
+import path from 'path'
 import cookieParser from 'cookie-parser'
 import routes from './router/index.js'
 import bodyParser from 'body-parser'
@@ -12,6 +14,14 @@ const corsOptions = {
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true // Permitir cookies y otros encabezados de autenticación
 }
+
+const logStream = fs.createWriteStream(path.join(__dirname, 'access.log'), {
+    flags: 'a'
+})
+
+app.use(morgan('dev', {
+    stream: logStream
+}))
 
 app.use(cors(corsOptions))
 app.use(morgan('dev'))
