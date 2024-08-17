@@ -27,8 +27,7 @@ export const Login = async (req, res) => {
     try {
 
         const {
-            username,
-            email,
+            username: useremail,
             password
         } = req.body
 
@@ -37,37 +36,21 @@ export const Login = async (req, res) => {
         let usernameEmail = null
         let block = null
 
-        if (username) {
+        if (useremail) {
 
-            const existeUSERNAME = await consultarUsername(username)
+            const existeUSERNAME = await consultarUsername(useremail)
 
             if (existeUSERNAME.length == 0) {
                 return res.status(404).json({
-                    Error: `USERNAME no existe: ${username}`
+                    Error: `USERNAME no existe: ${useremail}`
                 })
             }
             console.log(existeUSERNAME)
             password_DB = existeUSERNAME[0].dataValues.password
             id = existeUSERNAME[0].dataValues.id
 
-            block = await verificarBloqueado(username)
-            usernameEmail = username
-
-        } else if (email) {
-
-            const existeEMAIL = await consultarEmail(email)
-
-            if (existeEMAIL.length == 0) {
-                return res.status(404).json({
-                    Error: `EMAIL no existe: ${email}`
-                })
-            }
-            console.log(existeEMAIL)
-            password_DB = existeEMAIL[0].dataValues.password
-            id = existeEMAIL[0].dataValues.id
-
-            block = await verificarBloqueado(email)
-            usernameEmail = email
+            block = await verificarBloqueado(useremail)
+            usernameEmail = useremail
 
         } else {
 
@@ -127,9 +110,17 @@ export const Login = async (req, res) => {
         const token = await crearToken({
             id
         })
-        res.cookie("token", token)
 
-        return res.status(200).json({
+        console.log("token", token)
+
+        res.cookie("token", token, {
+            httpOnly: false,
+            secure: true,
+            path: '/',
+            sameSite: 'None'
+        })
+
+        res.status(200).json({
             ok: 'Login',
             data: {
                 id

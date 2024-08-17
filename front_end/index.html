@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Inmuebles</title>
+    <title>Index</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
 <body class="bg-gray-100 font-sans flex items-center justify-center min-h-screen">
 
     <div class="container mx-auto p-4">
-        <a href="inmuebles.html"
+        <!-- <a href="inmuebles.html"
             class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300 ease-in-out">
             Ver Lista Inmuebles
         </a>
@@ -22,13 +22,13 @@
             Ver Lista Clientes
         </a>
         <br>
-        <br>
-        <form class="max-w-md mx-auto bg-white p-8 rounded shadow-md">
+        <br> -->
+        <form id="login-form" class="max-w-md mx-auto bg-white p-8 rounded shadow-md">
             <h2 class="text-2xl font-bold mb-6">Iniciar sesión</h2>
 
             <div class="mb-4">
                 <label for="username" class="block text-gray-700 text-sm font-semibold mb-2">Username</label>
-                <input type="text" id="username" name="username" required
+                <input type="text" id="useremail" name="username" required
                     class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
             </div>
 
@@ -46,10 +46,9 @@
 
     </div>
 
-    <!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script src="./js/api.js"></script>
-    <script src="./js/app.js"></script> -->
+    <script type="module" src="./js/app.js"></script>
 </body>
 
 </html>

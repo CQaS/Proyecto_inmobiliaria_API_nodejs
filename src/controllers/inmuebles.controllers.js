@@ -265,7 +265,7 @@ export const editar_propiedad = async (req, res) => {
 export const inmuebles_lista = async (req, res) => {
     try {
         const _listarInmuebles = await listarInmuebles()
-        console.log(_listarInmuebles)
+        console.log('_listarInmuebles')
         console.log(_listarInmuebles.length)
         res.json(_listarInmuebles)
 

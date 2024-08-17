@@ -22,11 +22,15 @@ const consultarAuthUser = async (id) => {
     })
 }
 
-const consultarUsername = async (username) => {
+const consultarUsername = async (useremail) => {
     await AuthUsers.sync()
     return await AuthUsers.findAll({
         where: {
-            username
+            [Op.or]: [{
+                username: useremail
+            }, {
+                email: useremail
+            }]
         }
     })
 }
@@ -192,7 +196,7 @@ const crearBlock = async (bandera, dataBlock) => {
 
             return {
                 ok: "Block eliminado exitosamente!",
-                data: datosAuthUser
+                data: dataBlock
             }
         }
 
