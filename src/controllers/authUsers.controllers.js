@@ -111,6 +111,8 @@ export const Login = async (req, res) => {
             id
         })
 
+        req.session.user = existeUSERNAME
+
         console.log("token", token)
 
         res.cookie("token", token, {
@@ -139,12 +141,22 @@ export const Login = async (req, res) => {
 export const Logout = async (req, res) => {
     try {
 
-        res.cookie("token", '', {
-            expires: new Date(0)
-        })
+        req.session.destroy(err => {
 
-        return res.status(200).json({
-            ok: 'Logout'
+            if (err) {
+                return res.status(500).send('Error al cerrar sesión.')
+            }
+
+            res.clearCookie('token', {
+                httpOnly: false,
+                secure: true,
+                path: '/',
+                sameSite: 'None'
+            })
+
+            return res.status(200).json({
+                ok: 'Logout'
+            })
         })
 
     } catch (err) {
@@ -212,7 +224,12 @@ export const CrearUser = async (req, res) => {
             })
             res.cookie("token", token) */
 
-            return res.status(200).json(AuthUserGuardado)
+            return res.status(200).json({
+                ok: 'Crear',
+                data: {
+                    AuthUserGuardado
+                }
+            })
         }
 
         if (AuthUserGuardado.Error) {

@@ -14,7 +14,7 @@ Fotos_prop.init({
         autoIncrement: true,
     },
     image: {
-        type: DataTypes.STRING, // Puedes ajustar el tipo según cómo manejas las imágenes en tu aplicación
+        type: DataTypes.STRING,
         allowNull: false,
     },
     inmueble_id: {

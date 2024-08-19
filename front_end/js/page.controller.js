@@ -1,11 +1,15 @@
 import {
     getInmuebles,
     getClientes,
-    login
+    login,
+    registro,
+    logout
 } from './api.js';
 
 export const pageFunctions = {
     'inmuebles.html': getInmuebles,
     'clientes.html': getClientes,
-    'login': login
+    'login': login,
+    'registro': registro,
+    'logout': logout
 }

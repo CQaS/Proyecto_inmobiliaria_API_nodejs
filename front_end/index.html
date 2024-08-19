@@ -6,44 +6,130 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Index</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./style/btn.logout.css">
 </head>
 
 <body class="bg-gray-100 font-sans flex items-center justify-center min-h-screen">
 
-    <div class="container mx-auto p-4">
-        <!-- <a href="inmuebles.html"
-            class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300 ease-in-out">
-            Ver Lista Inmuebles
-        </a>
-        <br>
-        <br>
-        <a href="clientes.html"
-            class="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300 ease-in-out">
-            Ver Lista Clientes
-        </a>
-        <br>
-        <br> -->
-        <form id="login-form" class="max-w-md mx-auto bg-white p-8 rounded shadow-md">
-            <h2 class="text-2xl font-bold mb-6">Iniciar sesión</h2>
+    <section id="login">
 
-            <div class="mb-4">
-                <label for="username" class="block text-gray-700 text-sm font-semibold mb-2">Username</label>
-                <input type="text" id="useremail" name="username" required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
+        <div class="container mx-auto p-4">
+            <form id="login-form" class="max-w-md mx-auto bg-white p-8 rounded shadow-md">
+                <h2 class="text-2xl font-bold mb-6">Iniciar sesión</h2>
+                <div class="shrink-1 mb-12 grow-0 basis-auto md:mb-0 md:w-9/12 md:shrink-0 lg:w-6/12 xl:w-6/12">
+                    <img src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                        class="w-full" alt="Sample image" />
+                </div>
 
-            <div class="mb-6">
-                <label for="password" class="block text-gray-700 text-sm font-semibold mb-2">Password</label>
-                <input type="password" id="password" name="password" required
-                    class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-            </div>
+                <div class="mb-4">
+                    <label for="username" class="block text-gray-700 text-sm font-semibold mb-2">Username</label>
+                    <input type="text" id="useremail" name="username" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
 
-            <button type="submit"
-                class="w-full bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300 ease-in-out">
-                Iniciar sesión
-            </button>
-        </form>
+                <div class="mb-6">
+                    <label for="password" class="block text-gray-700 text-sm font-semibold mb-2">Password</label>
+                    <input type="password" id="password" name="password" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
 
+                <button type="submit"
+                    class="w-full bg-blue-500 text-white py-2 mb-4 px-4 rounded hover:bg-blue-700 transition duration-300 ease-in-out">
+                    Iniciar sesión
+                </button>
+
+                <div class="flex items-center justify-between pb-6">
+                    <p class="mb-0 me-2">No estas registrado?</p>
+                    <button type="button" id="ir_registrar"
+                        class="inline-block rounded border-2 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg-danger-50/50 hover:text-danger-600 focus:border-danger-600 focus:bg-danger-50/50 focus:text-danger-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-rose-950 dark:focus:bg-rose-950"
+                        data-twe-ripple-init data-twe-ripple-color="light">
+                        Registrar
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </section>
+
+    <section id="registro" style="display: none;">
+
+        <div class="container mx-auto p-4">
+            <form id="registro-form" class="max-w-md mx-auto bg-white p-8 rounded shadow-md">
+                <h2 class="text-2xl font-bold mb-6">Registrar Usuario</h2>
+
+                <div class="mb-4">
+                    <label for="username" class="block text-gray-700 text-sm font-semibold mb-2">Username</label>
+                    <input type="text" id="username" name="username" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div class="mb-4">
+                    <label for="first_name" class="block text-gray-700 text-sm font-semibold mb-2">First Name</label>
+                    <input type="text" id="first_name" name="first_name" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div class="mb-4">
+                    <label for="last_name" class="block text-gray-700 text-sm font-semibold mb-2">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700 text-sm font-semibold mb-2">Email</label>
+                    <input type="email" id="email" name="email" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="block text-gray-700 text-sm font-semibold mb-2">Password</label>
+                    <input type="password" id="password" name="password" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+
+                <div class="mb-4">
+                    <input type="checkbox" name="is_staff" id="is_staff">
+                    <label class="inline-block ps-[0.15rem] hover:cursor-pointer" for="is_staff">
+                        is_staff
+                    </label>
+                </div>
+
+                <div class="mb-4">
+                    <input type="checkbox" name="is_active" id="is_active">
+                    <label class="inline-block ps-[0.15rem] hover:cursor-pointer" for="is_active">
+                        is_active
+                    </label>
+                </div>
+
+                <div class="mb-4">
+                    <input type="checkbox" name="is_superuser" id="is_superuser">
+                    <label class="inline-block ps-[0.15rem] hover:cursor-pointer" for="is_superuser">
+                        is_superuser
+                    </label>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-blue-500 text-white py-2 px-4 mb-4 rounded hover:bg-blue-700 transition duration-300 ease-in-out">
+                    Registrar
+                </button>
+
+                <div class="flex items-center justify-between pb-6">
+                    <p class="mb-0 me-2">Estas registrado?</p>
+                    <button type="button" id="ir_login"
+                        class="inline-block rounded border-2 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg-danger-50/50 hover:text-danger-600 focus:border-danger-600 focus:bg-danger-50/50 focus:text-danger-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-rose-950 dark:focus:bg-rose-950"
+                        data-twe-ripple-init data-twe-ripple-color="light">
+                        Login
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </section>
+
+    <div class="wrapper">
+        <div class="inner" id="inner">
+            <span></span>
+        </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

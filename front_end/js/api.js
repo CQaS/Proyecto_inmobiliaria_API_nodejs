@@ -78,6 +78,68 @@ export const login = async (username, password) => {
     }
 }
 
+export const logout = async () => {
+    try {
+
+        const response = await axios.post(`${apiUrl}/authusers/logout`, {
+            withCredentials: true
+        })
+
+        if (response.data.ok === 'Logout') {
+
+            const retardante = () => {
+
+                window.location.href = 'index.html'
+
+            }
+
+            setTimeout(retardante, 1000)
+
+            //_alerta('Logout exitoso', 'success')
+
+        } else {
+
+            _alerta(response.data.Error, 'error')
+        }
+
+    } catch (error) {
+        console.error('Error en el login:', error)
+        _alerta('Error en el login', 'error')
+    }
+}
+
+export const registro = async (data) => {
+    try {
+
+        console.log(data)
+
+        const response = await axios.post(`${apiUrl}/authusers/crear_user`, data, {
+            withCredentials: true
+        })
+
+        if (response.data.ok === 'Crear') {
+
+            const retardante = () => {
+
+                window.location.href = 'index.html'
+
+            }
+
+            setTimeout(retardante, 1000)
+
+            //_alerta('Login exitoso', 'success')
+
+        } else {
+
+            _alerta(response.data.Error, 'error')
+        }
+
+    } catch (error) {
+        console.error('Error en el registro:', error)
+        _alerta(`Error en el registro: ${error.response.data.Error}`, 'error')
+    }
+}
+
 const catchError = (error) => {
 
     if (error.response.data.Error == 'NO TIENES ACCESSO AUTORIZADO, SIN TOKEN!') {

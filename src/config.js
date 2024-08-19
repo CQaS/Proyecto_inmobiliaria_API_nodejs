@@ -9,6 +9,7 @@ export const DATABASE = process.env.DATABASE
 export const PORT = process.env.PORT
 export const salt = process.env.salt
 export const SECRET_KEY = process.env.SECRET_KEY
+export const SECRET_KEY_SESSION = process.env.SECRET_KEY_SESSION
 
 
 /* VALIDADORES */
