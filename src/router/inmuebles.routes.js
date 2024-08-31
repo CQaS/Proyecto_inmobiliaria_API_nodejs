@@ -26,10 +26,13 @@ import {
 import {
     authRequerido
 } from '../middleware/validarToken.middleware.js'
+import {
+    esAutentico
+} from "../middleware/esAutentico.middleware.js"
 
 const routesInmuebles = Router()
 
-routesInmuebles.get('/inmuebles_lista', authRequerido, inmuebles_lista)
+routesInmuebles.get('/inmuebles_lista', inmuebles_lista)
 routesInmuebles.get('/inmuebles_exclusivos', exclusivos)
 routesInmuebles.get('/inmueble_detalles/:id', inmueble_detalles)
 routesInmuebles.get('/fotosporinmueble/:id', fotosporinmueble)

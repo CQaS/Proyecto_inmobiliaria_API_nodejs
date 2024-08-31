@@ -131,6 +131,9 @@ const listarInmuebles_tipo_o = async (tipo_o, fecha1, fecha2) => {
                 ]
             },
             required: false
+        }, {
+            model: Fotos_prop,
+            as: 'fotos', // Nombre de la asociación
         }],
         having: literal('COUNT(contratos.id_contrato) = 0'),
         group: ['Inmueble.id_inmueble']
@@ -163,6 +166,9 @@ const listarInmuebles_tipo_o_p = async (tipo_o, tipo_p, fecha1, fecha2) => {
                 ]
             },
             required: false
+        }, {
+            model: Fotos_prop,
+            as: 'fotos', // Nombre de la asociación
         }],
         having: literal('COUNT(contratos.id_contrato) = 0'),
         group: ['Inmueble.id_inmueble']

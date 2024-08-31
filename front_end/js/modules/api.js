@@ -1,11 +1,12 @@
 import {
     renderInmuebles,
-    renderClientes
+    renderClientes,
+    renderEmpleados
 } from './render.js'
 
 import {
     _alerta
-} from './alertas/alerta_swal.js'
+} from './alerta_swal.js'
 
 const apiUrl = 'http://localhost:3000/api'
 
@@ -19,8 +20,9 @@ export const getInmuebles = async () => {
         renderInmuebles(response.data)
 
     } catch (error) {
+        console.log(error)
 
-        catchError(error)
+        catchError(error, 'inmuebles')
 
         throw error
     }
@@ -37,7 +39,24 @@ export const getClientes = async () => {
 
     } catch (error) {
 
-        catchError(error)
+        catchError(error, 'clientes')
+
+        throw error
+    }
+}
+
+export const getEmpleados = async () => {
+
+    try {
+
+        const response = await axios.get(`${apiUrl}/empleados/empleados_lista`, {
+            withCredentials: true
+        })
+        renderEmpleados(response.data)
+
+    } catch (error) {
+
+        catchError(error, 'clientes')
 
         throw error
     }
@@ -140,9 +159,9 @@ export const registro = async (data) => {
     }
 }
 
-const catchError = (error) => {
+const catchError = (error, page) => {
 
-    if (error.response.data.Error == 'NO TIENES ACCESSO AUTORIZADO, SIN TOKEN!') {
+    if (error.response.data.Error == 'NO TIENES ACCESSO AUTORIZADO, SIN TOKEN!' || error.response.data.Error == 'NO ESTAS ATENTICADO. POR FAVOR INICA SESSION!') {
 
         Swal.fire({
             icon: 'error',
@@ -184,7 +203,7 @@ const catchError = (error) => {
 
                         _alerta('Se ha iniciado sesión correctamente', 'success')
 
-                        location.reload()
+                        window.location.href = `${page}.html`
                     }
 
                 } catch (loginError) {
@@ -195,6 +214,7 @@ const catchError = (error) => {
         })
 
     } else {
+        console.log(error)
 
         _alerta('Error fetching inmuebles', 'error')
     }

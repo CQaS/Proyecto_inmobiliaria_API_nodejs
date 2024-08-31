@@ -9,6 +9,8 @@ export const authRequerido = (req, res, next) => {
         token
     } = req.cookies
 
+    console.log('validar', token)
+
     if (!token) {
         console.log('NO TIENES ACCESSO AUTORIZADO, SIN TOKEN!')
         return res.status(400).json({
@@ -23,7 +25,7 @@ export const authRequerido = (req, res, next) => {
         console.log(user)
         req.user = user
 
-        console.log('token vaido')
+        console.log('token valido')
 
         next()
     })

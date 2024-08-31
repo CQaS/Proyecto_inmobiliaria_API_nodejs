@@ -375,6 +375,8 @@ export const propiedad_por_tipo = async (req, res) => {
             f_2
         } = req.query
 
+        console.log(req.query)
+
         const hoy = new Date();
         let fecha_formateada = hoy.toISOString().split('T')[0]
         let fecha_formateada2 = hoy.toISOString().split('T')[0]

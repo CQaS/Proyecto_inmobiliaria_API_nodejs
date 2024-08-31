@@ -35,10 +35,11 @@ export const Login = async (req, res) => {
         let id = null
         let usernameEmail = null
         let block = null
+        let existeUSERNAME = null
 
         if (useremail) {
 
-            const existeUSERNAME = await consultarUsername(useremail)
+            existeUSERNAME = await consultarUsername(useremail)
 
             if (existeUSERNAME.length == 0) {
                 return res.status(404).json({
@@ -111,7 +112,9 @@ export const Login = async (req, res) => {
             id
         })
 
-        req.session.user = existeUSERNAME
+        req.session.user = useremail
+        console.log('req.session.user')
+        console.log('userSession', req.session.user)
 
         console.log("token", token)
 
@@ -144,15 +147,24 @@ export const Logout = async (req, res) => {
         req.session.destroy(err => {
 
             if (err) {
-                return res.status(500).send('Error al cerrar sesión.')
+                return res.status(500).json({
+                    Error: 'Error al cerrar sesión.'
+                })
             }
 
-            res.clearCookie('token', {
+            res.clearCookie("token", {
                 httpOnly: false,
                 secure: true,
                 path: '/',
-                sameSite: 'None'
+                sameSite: 'None',
+                expires: new Date(0)
             })
+
+            const {
+                token
+            } = req.cookies
+
+            console.log('Logout completo', token)
 
             return res.status(200).json({
                 ok: 'Logout'
