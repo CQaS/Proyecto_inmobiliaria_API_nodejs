@@ -5,7 +5,6 @@ import {
 	initializeNavbar,
 	initializeCarousels,
 	loadHTML,
-	validateContactForm,
 	pageFunctions,
 	_alerta
 } from './modules/index.js'
@@ -15,7 +14,7 @@ const init = async () => {
 	try {
 
 		initializePreloader()
-		initializeScrollEvents()
+		//initializeScrollEvents()
 		initializeCarousels()
 
 		await Promise.all([
@@ -31,15 +30,8 @@ const init = async () => {
 
 			pageFunctions[page]()
 
-			/* const btn_inner = document.getElementById('inner')
-			btn_inner.addEventListener('click', () => {
-				
-				pageFunctions['logout']()
-				}) */
-
-		} else if (page == 'contacto.html') {
-
-			validateContactForm()
+			const link = document.querySelector(`a.nav-link[href="${page}"]`)
+			if (link) link.classList.add('active')
 
 		} else {
 

@@ -1,12 +1,9 @@
 import {
+    _alerta,
     renderInmuebles,
     renderClientes,
     renderEmpleados
-} from './render.js'
-
-import {
-    _alerta
-} from './alerta_swal.js'
+} from './index.js'
 
 const apiUrl = 'http://localhost:3000/api'
 

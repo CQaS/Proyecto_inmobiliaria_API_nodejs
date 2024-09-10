@@ -4,19 +4,19 @@ export const validateContactForm = () => {
     "use strict"
 
     $('form.contactForm').submit(() => {
-      var f = $(this).find('.form-group'),
+      let f = $(this).find('.form-group'),
         ferror = false,
         emailExp = /^[^\s()<>@,;:\/]+@\w[\w\.-]+\.[a-z]{2,}$/i
 
       f.children('input').each(() => {
-        var i = $(this)
-        var rule = i.attr('data-rule')
+        let i = $(this)
+        let rule = i.attr('data-rule')
 
         if (rule !== undefined) {
-          var ierror = false
-          var pos = rule.indexOf(':', 0)
+          let ierror = false
+          let pos = rule.indexOf(':', 0)
           if (pos >= 0) {
-            var exp = rule.substr(pos + 1, rule.length)
+            let exp = rule.substr(pos + 1, rule.length)
             rule = rule.substr(0, pos)
           } else {
             rule = rule.substr(pos + 1, rule.length)
@@ -58,14 +58,14 @@ export const validateContactForm = () => {
         }
       })
       f.children('textarea').each(() => {
-        var i = $(this)
-        var rule = i.attr('data-rule')
+        let i = $(this)
+        let rule = i.attr('data-rule')
 
         if (rule !== undefined) {
-          var ierror = false
-          var pos = rule.indexOf(':', 0)
+          let ierror = false
+          let pos = rule.indexOf(':', 0)
           if (pos >= 0) {
-            var exp = rule.substr(pos + 1, rule.length)
+            let exp = rule.substr(pos + 1, rule.length)
             rule = rule.substr(0, pos)
           } else {
             rule = rule.substr(pos + 1, rule.length)
@@ -87,9 +87,10 @@ export const validateContactForm = () => {
           i.next('.validation').html((ierror ? (i.attr('data-msg') !== undefined ? i.attr('data-msg') : 'wrong Input') : '')).show('blind')
         }
       })
+      let str = null
       if (ferror) return false
-      else var str = $(this).serialize()
-      var action = $(this).attr('action')
+      else str = $(this).serialize()
+      let action = $(this).attr('action')
       if (!action) {
         action = window.location.href
       }
