@@ -1,20 +1,62 @@
 import {
     _alerta,
-    renderInmuebles,
+    renderExclusivosInmuebles,
+    renderAllInmuebles,
+    renderUnInmuebles,
     renderClientes,
     renderEmpleados
 } from './index.js'
 
 const apiUrl = 'http://localhost:3000/api'
 
-export const getInmuebles = async () => {
+export const getExclusivosInmuebles = async () => {
+
+    try {
+
+        const response = await axios.get(`${apiUrl}/inmuebles/inmuebles_exclusivos`, {
+            withCredentials: true
+        })
+        renderExclusivosInmuebles(response.data)
+
+    } catch (error) {
+        console.log(error)
+
+        catchError(error, 'inmuebles')
+
+        throw error
+    }
+}
+
+export const getAllInmuebles = async () => {
 
     try {
 
         const response = await axios.get(`${apiUrl}/inmuebles/inmuebles_lista`, {
             withCredentials: true
         })
-        renderInmuebles(response.data)
+        renderAllInmuebles(response.data)
+
+    } catch (error) {
+        console.log(error)
+
+        catchError(error, 'inmuebles')
+
+        throw error
+    }
+}
+
+export const getUnInmuebles = async () => {
+
+    try {
+
+        const params = new URLSearchParams(window.location.search)
+        const idUnInmueble = params.get('idUnInmueble')
+
+        const response = await axios.get(`${apiUrl}/inmuebles/inmueble_detalles/${idUnInmueble}`, {
+            withCredentials: true
+        })
+
+        response.data.Error ? _alerta(response.data.Error, 'error') : renderUnInmuebles(response.data)
 
     } catch (error) {
         console.log(error)
@@ -213,7 +255,7 @@ const catchError = (error, page) => {
     } else {
         console.log(error)
 
-        _alerta('Error fetching inmuebles', 'error')
+        _alerta('Error: Consulta con Admin', 'error')
     }
 
 }
