@@ -7,7 +7,9 @@ export const renderEmpleados = (data) => {
 
   const equipo = document.getElementById('equipo')
 
-  equipo.innerHTML = `
+  if (equipo) {
+
+    equipo.innerHTML = `
         <div class="col-md-4">
           <div class="card-box-d">
             <div class="card-img-d">
@@ -182,6 +184,11 @@ export const renderEmpleados = (data) => {
             </div>
           </div>
         </div>`
+  }
 
+}
 
+export const renderUnEmpleado = (data) => {
+
+  console.log(data)
 }

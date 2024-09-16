@@ -158,7 +158,7 @@ export const editar_empleado = async (req, res) => {
     }
 }
 
-export const recibo_empleado = async (req, res) => {
+export const empleado_detalle = async (req, res) => {
     try {
         const id = req.params.id
 
@@ -179,6 +179,7 @@ export const recibo_empleado = async (req, res) => {
 
     }
 }
+
 export const eliminar_empleado = async (req, res) => {
     try {
         const id = req.params.id

@@ -4,7 +4,8 @@ import {
     renderAllInmuebles,
     renderUnInmuebles,
     renderClientes,
-    renderEmpleados
+    renderEmpleados,
+    renderUnEmpleado
 } from './index.js'
 
 const apiUrl = 'http://localhost:3000/api'
@@ -84,7 +85,7 @@ export const getClientes = async () => {
     }
 }
 
-export const getEmpleados = async () => {
+export const getAllEmpleados = async () => {
 
     try {
 
@@ -92,6 +93,26 @@ export const getEmpleados = async () => {
             withCredentials: true
         })
         renderEmpleados(response.data)
+
+    } catch (error) {
+
+        catchError(error, 'clientes')
+
+        throw error
+    }
+}
+
+export const getUnEmpleado = async () => {
+
+    try {
+
+        let id_empleado = 7
+
+        const response = await axios.get(`${apiUrl}/empleados/empleado_detalle/${id_empleado}`, {
+            withCredentials: true
+        })
+
+        renderUnEmpleado(response.data)
 
     } catch (error) {
 
@@ -255,7 +276,7 @@ const catchError = (error, page) => {
     } else {
         console.log(error)
 
-        _alerta('Error: Consulta con Admin', 'error')
+        _alerta(`Error: ${error.response.data.Error}`, 'error')
     }
 
 }
