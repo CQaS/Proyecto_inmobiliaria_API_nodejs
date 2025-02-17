@@ -1,6 +1,8 @@
 import app from "./app.js"
+import {
+    PORT
+} from './config.js'
 
-const PORT = 3000
 app.listen(PORT, () => {
     console.log(`server http://localhost:${PORT}`)
 })

@@ -35,7 +35,7 @@ export const getAllInmuebles = async () => {
         const response = await axios.get(`${apiUrl}/inmuebles/inmuebles_lista`, {
             withCredentials: true
         })
-        renderAllInmuebles(response.data)
+        await renderAllInmuebles(response.data)
 
     } catch (error) {
         console.log(error)

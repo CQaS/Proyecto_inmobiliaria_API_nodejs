@@ -23,6 +23,7 @@ async function testConnection() {
         console.log(`Conectado con DB : ${DATABASE}`)
     } catch (error) {
         console.error('Unable to connect to the database:', error)
+        process.exit(1) // Termina el proceso con un código de error
     }
 }
 
